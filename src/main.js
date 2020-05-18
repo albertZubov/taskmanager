@@ -1,22 +1,52 @@
 "use strict";
 
 (function () {
-  const card = () => `  
-<article class="card card--black">
+  const _this = {
+    main: document.querySelector(".main"),
+  };
+
+  const modifierCl = {
+    card: {
+      color: {
+        black: `black`,
+        yellow: `yellow`,
+      },
+      edit: `edit`,
+      repeat: `repeat`,
+    },
+    btn: {
+      edit: `edit`,
+      archive: `archive`,
+      favorites: `favorites`,
+      disabled: `disabled`,
+    },
+  };
+
+  const card = (
+    color,
+    btnEdit,
+    btnArchive,
+    btnFavorites,
+    btnDisabled,
+    content,
+    date,
+    time
+  ) => `  
+<article class="card card--${color}">
   <div class="card__form">
     <div class="card__inner">
       <div class="card__control">
-        <button type="button" class="card__btn card__btn--edit">
-          edit
+        <button type="button" class="card__btn card__btn--${btnEdit}">
+        edit
         </button>
-        <button type="button" class="card__btn card__btn--archive">
-          archive
+        <button type="button" class="card__btn card__btn--${btnArchive}">
+        archive
         </button>
         <button
           type="button"
-          class="card__btn card__btn--favorites card__btn--disabled"
+          class="card__btn card__btn--${btnFavorites} card__btn--${btnDisabled}"
         >
-          favorites
+        favorites
         </button>
       </div>
 
@@ -27,7 +57,7 @@
       </div>
 
       <div class="card__textarea-wrap">
-        <p class="card__text"></p>
+        <p class="card__text">${content}</p>
       </div>
 
       <div class="card__settings">
@@ -35,8 +65,8 @@
           <div class="card__dates">
             <div class="card__date-deadline">
               <p class="card__input-deadline-wrap">
-                <span class="card__date">23 September</span>
-                <span class="card__time">16:15</span>
+                <span class="card__date">${date}</span>
+                <span class="card__time">${time}</span>
               </p>
             </div>
           </div>
@@ -47,8 +77,16 @@
 </article>
   `;
 
-  const cardEdit = () => `
-  <article class="card card--edit card--yellow card--repeat">
+  const cardEdit = (
+    edit,
+    color,
+    repeat,
+    content,
+    dateStatus,
+    dateValue,
+    repeatStatus
+  ) => `
+  <article class="card card--${edit} card--${color} card--${repeat}">
   <form class="card__form" method="get">
     <div class="card__inner">
       <div class="card__color-bar">
@@ -63,7 +101,7 @@
             class="card__text"
             placeholder="Start typing your text here..."
             name="text"
-          >Here is a card with filled data</textarea>
+          >${content}</textarea>
         </label>
       </div>
 
@@ -71,7 +109,7 @@
         <div class="card__details">
           <div class="card__dates">
             <button class="card__date-deadline-toggle" type="button">
-              date: <span class="card__date-status">yes</span>
+              date: <span class="card__date-status">${dateStatus}</span>
             </button>
 
             <fieldset class="card__date-deadline">
@@ -81,13 +119,13 @@
                   type="text"
                   placeholder=""
                   name="date"
-                  value="23 September 16:15"
+                  value="${dateValue}"
                 />
               </label>
             </fieldset>
 
             <button class="card__repeat-toggle" type="button">
-              repeat:<span class="card__repeat-status">yes</span>
+              repeat:<span class="card__repeat-status">${repeatStatus}</span>
             </button>
 
             <fieldset class="card__repeat-days">
@@ -247,7 +285,14 @@
 </article>
   `;
 
-  const filter = () => `
+  const filter = (
+    countAll,
+    countOverdue,
+    countToday,
+    countFavorites,
+    countRepeating,
+    countArchive
+  ) => `
         <section class="main__filter filter container">
         <input
           type="radio"
@@ -257,7 +302,7 @@
           checked
         />
         <label for="filter__all" class="filter__label">
-          All <span class="filter__all-count">13</span></label
+          All <span class="filter__all-count">${countAll}</span></label
         >
         <input
           type="radio"
@@ -267,7 +312,7 @@
           disabled
         />
         <label for="filter__overdue" class="filter__label"
-          >Overdue <span class="filter__overdue-count">0</span></label
+          >Overdue <span class="filter__overdue-count">${countOverdue}</span></label
         >
         <input
           type="radio"
@@ -277,7 +322,7 @@
           disabled
         />
         <label for="filter__today" class="filter__label"
-          >Today <span class="filter__today-count">0</span></label
+          >Today <span class="filter__today-count">${countToday}</span></label
         >
         <input
           type="radio"
@@ -286,7 +331,7 @@
           name="filter"
         />
         <label for="filter__favorites" class="filter__label"
-          >Favorites <span class="filter__favorites-count">1</span></label
+          >Favorites <span class="filter__favorites-count">${countFavorites}</span></label
         >
         <input
           type="radio"
@@ -295,7 +340,7 @@
           name="filter"
         />
         <label for="filter__repeating" class="filter__label"
-          >Repeating <span class="filter__repeating-count">1</span></label
+          >Repeating <span class="filter__repeating-count">${countRepeating}</span></label
         >
         <input
           type="radio"
@@ -304,14 +349,14 @@
           name="filter"
         />
         <label for="filter__archive" class="filter__label"
-          >Archive <span class="filter__archive-count">115</span></label
+          >Archive <span class="filter__archive-count">${countArchive}</span></label
         >
       </section>
   `;
 
-  const control = () => `
+  const control = (title) => `
   <section class="main__control control container">
-  <h1 class="control__title">TASKMANAGER</h1>
+  <h1 class="control__title">${title}</h1>
   <section class="control__btn-wrap">
     <input
       type="radio"
@@ -342,6 +387,53 @@
   </section>
 </section>
   `;
+
+  const loadMore = (content) => `
+  <button class="load-more" type="button">${content}</button>
+  `;
+
+  const render = (...args) => {
+    const controlRemove = _this.main.querySelector(".control");
+    _this.main.removeChild(controlRemove);
+
+    const quantityCard = 3;
+    let card = args[0];
+
+    for (let i = 0; i < quantityCard - 1; i++) {
+      card += args[1];
+    }
+
+    args[0] = card;
+
+    for (let i = 0; i < args.length; i++) {
+      _this.main.innerHTML += args[i];
+    }
+  };
+
+  render(
+    cardEdit(
+      modifierCl.card.edit,
+      modifierCl.card.color.yellow,
+      modifierCl.card.repeat,
+      `Here is a card with filled data`,
+      `yes`,
+      `23 September 16:15`,
+      `yes`
+    ),
+    card(
+      modifierCl.card.color.black,
+      modifierCl.btn.edit,
+      modifierCl.btn.archive,
+      modifierCl.btn.favorites,
+      modifierCl.btn.disabled,
+      `Example task with custom color.`,
+      `23 September`,
+      `16:15`
+    ),
+    control(`TASKMANAGER`),
+    filter(`13`, `0`, `0`, `1`, `1`, `115`),
+    loadMore(`load-more`)
+  );
 
   // render(card(`JR`));
 })();
