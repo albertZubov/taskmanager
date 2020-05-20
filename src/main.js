@@ -1,9 +1,7 @@
 "use strict";
 
 (function () {
-  const _this = {
-    main: document.querySelector(".main"),
-  };
+  const main = document.querySelector(`.main`);
 
   const modifierCl = {
     card: {
@@ -21,6 +19,21 @@
       disabled: `disabled`,
     },
   };
+
+  // Очистка main
+  const controlRemove = main.querySelector(`.control`);
+  main.removeChild(controlRemove);
+
+  const board = () => `
+  <section class="board container">
+        <div class="board__filter-list">
+          <a href="#" class="board__filter" data-sort-type="default">SORT BY DEFAULT</a>
+          <a href="#" class="board__filter" data-sort-type="date-up">SORT BY DATE up</a>
+          <a href="#" class="board__filter" data-sort-type="date-down">SORT BY DATE down</a>
+        </div>
+        <div class="board__tasks"></div>
+      </section>
+  `;
 
   const card = (
     color,
@@ -392,25 +405,18 @@
   <button class="load-more" type="button">${content}</button>
   `;
 
-  const render = (...args) => {
-    const controlRemove = _this.main.querySelector(".control");
-    _this.main.removeChild(controlRemove);
-
-    const quantityCard = 3;
-    let card = args[0];
-
-    for (let i = 0; i < quantityCard - 1; i++) {
-      card += args[1];
-    }
-
-    args[0] = card;
-
-    for (let i = 0; i < args.length; i++) {
-      _this.main.innerHTML += args[i];
-    }
+  const render = (container, element) => {
+    container.insertAdjacentHTML(`beforeEnd`, element);
   };
 
+  render(main, control(`TASKMANAGER`));
+  render(main, filter(`13`, `0`, `0`, `1`, `1`, `115`));
+  render(main, board());
+
+  const boardElem = main.querySelector(`.board`);
+  const boardTask = main.querySelector(`.board__tasks`);
   render(
+    boardTask,
     cardEdit(
       modifierCl.card.edit,
       modifierCl.card.color.yellow,
@@ -419,7 +425,11 @@
       `yes`,
       `23 September 16:15`,
       `yes`
-    ),
+    )
+  );
+
+  render(
+    boardTask,
     card(
       modifierCl.card.color.black,
       modifierCl.btn.edit,
@@ -429,11 +439,36 @@
       `Example task with custom color.`,
       `23 September`,
       `16:15`
-    ),
-    control(`TASKMANAGER`),
-    filter(`13`, `0`, `0`, `1`, `1`, `115`),
-    loadMore(`load-more`)
+    )
   );
 
-  // render(card(`JR`));
+  render(
+    boardTask,
+    card(
+      modifierCl.card.color.black,
+      modifierCl.btn.edit,
+      modifierCl.btn.archive,
+      modifierCl.btn.favorites,
+      modifierCl.btn.disabled,
+      `Example task with custom color.`,
+      `23 September`,
+      `16:15`
+    )
+  );
+
+  render(
+    boardTask,
+    card(
+      modifierCl.card.color.black,
+      modifierCl.btn.edit,
+      modifierCl.btn.archive,
+      modifierCl.btn.favorites,
+      modifierCl.btn.disabled,
+      `Example task with custom color.`,
+      `23 September`,
+      `16:15`
+    )
+  );
+
+  render(boardElem, loadMore(`load-more`));
 })();
