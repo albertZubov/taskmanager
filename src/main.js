@@ -367,9 +367,9 @@
       </section>
   `;
 
-  const control = (title) => `
+  const control = () => `
   <section class="main__control control container">
-  <h1 class="control__title">${title}</h1>
+  <h1 class="control__title">TASKMANAGER</h1>
   <section class="control__btn-wrap">
     <input
       type="radio"
@@ -401,20 +401,25 @@
 </section>
   `;
 
-  const loadMore = (content) => `
-  <button class="load-more" type="button">${content}</button>
+  const loadMore = () => `
+    <button class="load-more" type="button">load-more</button>
   `;
 
   const render = (container, element) => {
-    container.insertAdjacentHTML(`beforeEnd`, element);
+    const div = document.createElement(`div`);
+    div.innerHTML = element;
+    // div.insertAdjacentHTML(`beforeEnd`, element);
+    const node = div.firstElementChild;
+    container.append(node);
+
+    return node;
   };
 
-  render(main, control(`TASKMANAGER`));
-  render(main, filter(`13`, `0`, `0`, `1`, `1`, `115`));
-  render(main, board());
+  render(main, control());
+  render(main, filter(13, 0, 0, 1, 1, 115));
 
-  const boardElem = main.querySelector(`.board`);
-  const boardTask = main.querySelector(`.board__tasks`);
+  const boardElem = render(main, board());
+  const boardTask = boardElem.querySelector(`.board__tasks`);
   render(
     boardTask,
     cardEdit(
@@ -470,5 +475,5 @@
     )
   );
 
-  render(boardElem, loadMore(`load-more`));
+  render(boardElem, loadMore());
 })();
