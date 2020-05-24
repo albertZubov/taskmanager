@@ -13,13 +13,9 @@
   </head>
 
   <body>
-    <div style="display: none">
+    <div style="display: none;">
       <svg>
-        <symbol
-          id="wave"
-          viewBox="0 0 159 10"
-          preserveAspectRatio="none"
-        >
+        <symbol id="wave" viewBox="0 0 159 10" preserveAspectRatio="none">
           <g
             fill="none"
             fill-rule="nonzero"
@@ -44,7 +40,9 @@
             id="control__new-task"
             class="control__input visually-hidden"
           />
-          <label for="control__new-task" class="control__label control__label--new-task"
+          <label
+            for="control__new-task"
+            class="control__label control__label--new-task"
             >+ ADD NEW TASK</label
           >
           <input
@@ -65,6 +63,16 @@
             >STATISTICS</label
           >
         </section>
+      </section>
+
+      <section class="main__search search container">
+        <input
+          type="text"
+          id="search__input"
+          class="search__input"
+          placeholder="START TYPING — SEARCH BY WORD, #HASHTAG OR DATE"
+        />
+        <label class="visually-hidden" for="search__input">Search</label>
       </section>
 
       <section class="main__filter filter container">
@@ -129,9 +137,15 @@
 
       <section class="board container">
         <div class="board__filter-list">
-          <a href="#" class="board__filter" data-sort-type="default">SORT BY DEFAULT</a>
-          <a href="#" class="board__filter" data-sort-type="date-up">SORT BY DATE up</a>
-          <a href="#" class="board__filter" data-sort-type="date-down">SORT BY DATE down</a>
+          <a href="#" class="board__filter" data-sort-type="default"
+            >SORT BY DEFAULT</a
+          >
+          <a href="#" class="board__filter" data-sort-type="date-up"
+            >SORT BY DATE up</a
+          >
+          <a href="#" class="board__filter" data-sort-type="date-down"
+            >SORT BY DATE down</a
+          >
         </div>
 
         <div class="board__tasks">
@@ -248,12 +262,13 @@
                 </div>
 
                 <div class="card__textarea-wrap">
-                  <p class="card__text">Example task with custom color and without date.</p>
+                  <p class="card__text">
+                    Example task with custom color and without date.
+                  </p>
                 </div>
 
                 <div class="card__settings">
-                  <div class="card__details">
-                  </div>
+                  <div class="card__details"></div>
                 </div>
               </div>
             </div>
@@ -363,7 +378,9 @@
                 </div>
 
                 <div class="card__textarea-wrap">
-                  <p class="card__text">It is example of repeating task. It marks by wave.</p>
+                  <p class="card__text">
+                    It is example of repeating task. It marks by wave.
+                  </p>
                 </div>
 
                 <div class="card__settings">
@@ -442,7 +459,10 @@
                 </div>
 
                 <div class="card__textarea-wrap">
-                  <p class="card__text">This is task with missing deadline. Deadline always marked by red line.</p>
+                  <p class="card__text">
+                    This is task with missing deadline. Deadline always marked
+                    by red line.
+                  </p>
                 </div>
 
                 <div class="card__settings">
