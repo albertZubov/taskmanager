@@ -5,8 +5,10 @@ import { createCard } from "./components/card";
 import { createFilter } from "./components/filter";
 import { createLoadMore } from "./components/load-more";
 import { createMenu } from "./components/menu";
+import { getCard } from "./components/data";
 
 const main = document.querySelector(`.main`);
+const CARD_COUNT = 3;
 
 const modifierCl = {
   card: {
@@ -32,18 +34,19 @@ main.removeChild(controlRemove);
 const render = (container, element) => {
   const div = document.createElement(`div`);
   div.innerHTML = element;
-  // div.insertAdjacentHTML(`beforeEnd`, element);
-  const node = div.firstElementChild;
-  container.append(node);
+  const childrens = Array.from(div.children);
+  childrens.forEach((node) => {
+    container.append(node);
+  });
 
-  return node;
+  return childrens;
 };
 
 render(main, createMenu());
 render(main, createFilter(13, 0, 0, 1, 1, 115));
 render(main, createSearch());
 
-const boardElem = render(main, createBoard());
+const [boardElem] = render(main, createBoard());
 const boardTask = boardElem.querySelector(`.board__tasks`);
 render(
   boardTask,
@@ -60,44 +63,7 @@ render(
 
 render(
   boardTask,
-  createCard(
-    modifierCl.card.color.black,
-    modifierCl.btn.edit,
-    modifierCl.btn.archive,
-    modifierCl.btn.favorites,
-    modifierCl.btn.disabled,
-    `Example task with custom color.`,
-    `23 September`,
-    `16:15`
-  )
-);
-
-render(
-  boardTask,
-  createCard(
-    modifierCl.card.color.black,
-    modifierCl.btn.edit,
-    modifierCl.btn.archive,
-    modifierCl.btn.favorites,
-    modifierCl.btn.disabled,
-    `Example task with custom color.`,
-    `23 September`,
-    `16:15`
-  )
-);
-
-render(
-  boardTask,
-  createCard(
-    modifierCl.card.color.black,
-    modifierCl.btn.edit,
-    modifierCl.btn.archive,
-    modifierCl.btn.favorites,
-    modifierCl.btn.disabled,
-    `Example task with custom color.`,
-    `23 September`,
-    `16:15`
-  )
+  new Array(CARD_COUNT).fill(``).map(getCard).map(createCard).join(``)
 );
 
 render(boardElem, createLoadMore());
