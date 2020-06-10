@@ -1,11 +1,7 @@
 export const createCardEdit = (
   edit,
-  color,
   repeat,
-  content,
-  dateStatus,
-  dateValue,
-  repeatStatus
+  { color, description, isDate, date, isRepeat }
 ) => `
 <article class="card card--${edit} card--${color} card--${repeat}">
 <form class="card__form" method="get">
@@ -22,7 +18,7 @@ export const createCardEdit = (
           class="card__text"
           placeholder="Start typing your text here..."
           name="text"
-        >${content}</textarea>
+        >${description}</textarea>
       </label>
     </div>
 
@@ -30,7 +26,9 @@ export const createCardEdit = (
       <div class="card__details">
         <div class="card__dates">
           <button class="card__date-deadline-toggle" type="button">
-            date: <span class="card__date-status">${dateStatus}</span>
+            date: <span class="card__date-status">${
+              isDate ? `yes` : `no`
+            }</span>
           </button>
 
           <fieldset class="card__date-deadline">
@@ -40,13 +38,15 @@ export const createCardEdit = (
                 type="text"
                 placeholder=""
                 name="date"
-                value="${dateValue}"
+                value="${new Date(date).toDateString()}"
               />
             </label>
           </fieldset>
 
           <button class="card__repeat-toggle" type="button">
-            repeat:<span class="card__repeat-status">${repeatStatus}</span>
+            repeat:<span class="card__repeat-status">${
+              isRepeat ? `yes` : `no`
+            }</span>
           </button>
 
           <fieldset class="card__repeat-days">

@@ -25,14 +25,25 @@ export const getCard = () => ({
 
 export const getFilter = () => [
   {
-    title: new Set([
-      `ALL`,
-      `OVERDUE`,
-      `TODAY`,
-      `FAVORITES`,
-      `REPEATING`,
-      `ARCHIVE`,
-    ]),
+    title: [`ALL`, `OVERDUE`, `TODAY`, `FAVORITES`, `REPEATING`, `ARCHIVE`],
   },
-  {},
+  {
+    count(min, max) {
+      return Math.floor(Math.random() * (max - min) + min);
+    },
+  },
 ];
+
+export const getCardEdit = () => ({
+  color: [`black`, `green`, `yellow`, `pink`, `red`, `blue`][
+    Math.floor(Math.random() * 6)
+  ],
+  description: [
+    `Prepare for the pitch`,
+    `Find money for travel`,
+    `Eat something`,
+  ][Math.floor(Math.random() * 3)],
+  isDate: Boolean(Math.round(Math.random())),
+  isRepeat: Boolean(Math.round(Math.random())),
+  date: Date.now(),
+});
