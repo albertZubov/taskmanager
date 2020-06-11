@@ -46,12 +46,8 @@ export const createCard = ({
           <div class="card__dates">
             <div class="card__date-deadline">
               <p class="card__input-deadline-wrap">
-                <span class="card__date">${new Date(
-                  dueDate
-                ).toDateString()}</span>
-                <span class="card__time">${new Date(
-                  dueTime
-                ).getHours()} : ${new Date(dueTime).getMinutes()}</span>
+                <span class="card__date">${dueDate.toDateString()}</span>
+                <span class="card__time">${dueTime.getHours()} : ${dueTime.getMinutes()}</span>
               </p>
             </div>
           </div>

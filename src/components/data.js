@@ -1,49 +1,59 @@
+const getRandomBoolean = () => Boolean(Math.round(Math.random()));
+
+const getRandomNumber = (number) => getCountRandom(0, number);
+
+const getCountRandom = (min, max) =>
+  Math.floor(Math.random() * (max - min) + min);
+
 export const getCard = () => ({
   description: [
     `Prepare for the pitch`,
     `Find money for travel`,
     `Eat something`,
-  ][Math.floor(Math.random() * 3)],
-  dueDate: Date.now() + 1 + Math.floor(Math.random() * 7) * 24 * 60 * 60 * 1000,
-  dueTime: Date.now(),
+  ][getRandomNumber(3)],
+  dueDate: new Date(Date.now() + 1 + getRandomNumber(7) * 24 * 60 * 60 * 1000),
+  dueTime: new Date(),
   tags: new Set([`homework`, `theory`, `practice`, `intensive`, `keks`]),
   repeatingDays: {
     mo: false,
     tu: false,
-    we: Boolean(Math.round(Math.random())),
+    we: getRandomBoolean(),
     th: false,
     fr: false,
     sa: false,
     su: false,
   },
-  color: [`black`, `yellow`, `blue`, `green`, `pink`][
-    Math.floor(Math.random() * 5)
-  ],
-  isFavorite: Boolean(Math.round(Math.random())),
-  isArchive: Boolean(Math.round(Math.random())),
+  color: [`black`, `yellow`, `blue`, `green`, `pink`][getRandomNumber(5)],
+  isFavorite: getRandomBoolean(),
+  isArchive: getRandomBoolean(),
+  isDate: getRandomBoolean(),
+  isRepeat: getRandomBoolean(),
+  date: new Date(),
 });
 
 export const getFilter = () => [
   {
-    title: [`ALL`, `OVERDUE`, `TODAY`, `FAVORITES`, `REPEATING`, `ARCHIVE`],
+    title: `All`,
+    count: getCountRandom(1, 100),
   },
   {
-    count(min, max) {
-      return Math.floor(Math.random() * (max - min) + min);
-    },
+    title: `Overdue`,
+    count: 0,
+  },
+  {
+    title: `Today`,
+    count: 0,
+  },
+  {
+    title: `Favorites`,
+    count: getCountRandom(1, 10),
+  },
+  {
+    title: `Repeating`,
+    count: getCountRandom(1, 10),
+  },
+  {
+    title: `Archive`,
+    count: getCountRandom(1, 100),
   },
 ];
-
-export const getCardEdit = () => ({
-  color: [`black`, `green`, `yellow`, `pink`, `red`, `blue`][
-    Math.floor(Math.random() * 6)
-  ],
-  description: [
-    `Prepare for the pitch`,
-    `Find money for travel`,
-    `Eat something`,
-  ][Math.floor(Math.random() * 3)],
-  isDate: Boolean(Math.round(Math.random())),
-  isRepeat: Boolean(Math.round(Math.random())),
-  date: Date.now(),
-});

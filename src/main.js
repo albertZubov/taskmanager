@@ -5,7 +5,7 @@ import { createCard } from "./components/card";
 import { createFilter } from "./components/filter";
 import { createLoadMore } from "./components/load-more";
 import { createMenu } from "./components/menu";
-import { getCard, getFilter, getCardEdit } from "./components/data";
+import { getCard, getFilter } from "./components/data";
 
 const main = document.querySelector(`.main`);
 const CARD_COUNT = 7;
@@ -51,11 +51,7 @@ const [boardElem] = render(main, createBoard());
 const boardTask = boardElem.querySelector(`.board__tasks`);
 render(
   boardTask,
-  createCardEdit(
-    modifierCl.card.edit,
-    modifierCl.card.repeat,
-    ...[getCardEdit()]
-  )
+  createCardEdit(modifierCl.card.edit, modifierCl.card.repeat, getCard())
 );
 
 render(
@@ -70,7 +66,8 @@ btnLoad.addEventListener(`click`, () => {
     boardTask,
     new Array(CARD_LOAD_COUNT).fill(``).map(getCard).map(createCard).join(``)
   );
-  boardTask.children.length > 23
-    ? (btnLoad.style = `display: none`)
-    : (btnLoad.style = `display: block`);
+
+  btnLoad.style = `display: ${
+    boardTask.children.length > 23 ? `block` : `none`
+  }`;
 });

@@ -38,7 +38,7 @@ export const createCardEdit = (
                 type="text"
                 placeholder=""
                 name="date"
-                value="${new Date(date).toDateString()}"
+                value="${date}"
               />
             </label>
           </fieldset>

@@ -8,10 +8,7 @@ export const createFilter = (data) => `
           checked
         />
         <label for="filter__all" class="filter__label">
-          ${data[0].title[0]} <span class="filter__all-count">${data[1].count(
-  1,
-  100
-)}</span></label
+          ${data[0].title} <span class="filter__all-count">${data[0].count}</span></label
         >
         <input
           type="radio"
@@ -21,9 +18,7 @@ export const createFilter = (data) => `
           disabled
         />
         <label for="filter__overdue" class="filter__label"
-          >${
-            data[0].title[1]
-          } <span class="filter__overdue-count"></span></label
+          >${data[1].title} <span class="filter__overdue-count">${data[1].count}</span></label
         >
         <input
           type="radio"
@@ -33,7 +28,7 @@ export const createFilter = (data) => `
           disabled
         />
         <label for="filter__today" class="filter__label"
-          >${data[0].title[2]} <span class="filter__today-count"></span></label
+          >${data[2].title} <span class="filter__today-count">${data[2].count}</span></label
         >
         <input
           type="radio"
@@ -42,12 +37,7 @@ export const createFilter = (data) => `
           name="filter"
         />
         <label for="filter__favorites" class="filter__label"
-          >${
-            data[0].title[3]
-          } <span class="filter__favorites-count">${data[1].count(
-  1,
-  10
-)}</span></label
+          >${data[3].title} <span class="filter__favorites-count">${data[3].count}</span></label
         >
         <input
           type="radio"
@@ -56,12 +46,7 @@ export const createFilter = (data) => `
           name="filter"
         />
         <label for="filter__repeating" class="filter__label"
-          >${
-            data[0].title[4]
-          } <span class="filter__repeating-count">${data[1].count(
-  1,
-  10
-)}</span></label
+          >${data[4].title} <span class="filter__repeating-count">${data[4].count}</span></label
         >
         <input
           type="radio"
@@ -70,12 +55,7 @@ export const createFilter = (data) => `
           name="filter"
         />
         <label for="filter__archive" class="filter__label"
-          >${
-            data[0].title[5]
-          } <span class="filter__archive-count">${data[1].count(
-  1,
-  100
-)}</span></label
+          >${data[5].title} <span class="filter__archive-count">${data[5].count}</span></label
         >
       </section>
   `;
