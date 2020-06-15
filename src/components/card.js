@@ -1,6 +1,3 @@
-/* import { getCard } from "./data";
-const dataCard = getCard(); */
-
 export const createCard = ({
   description,
   dueDate,

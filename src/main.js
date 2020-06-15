@@ -68,6 +68,6 @@ btnLoad.addEventListener(`click`, () => {
   );
 
   btnLoad.style = `display: ${
-    boardTask.children.length > 23 ? `block` : `none`
+    boardTask.children.length < 23 ? `block` : `none`
   }`;
 });

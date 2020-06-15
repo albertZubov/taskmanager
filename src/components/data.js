@@ -35,14 +35,17 @@ export const getFilter = () => [
   {
     title: `All`,
     count: getCountRandom(1, 100),
+    status: `checked`,
   },
   {
     title: `Overdue`,
     count: 0,
+    status: `disabled`,
   },
   {
     title: `Today`,
     count: 0,
+    status: `disabled`,
   },
   {
     title: `Favorites`,
