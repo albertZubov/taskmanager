@@ -9,7 +9,7 @@ import { getCard, getFilter } from "./components/data";
 
 const main = document.querySelector(`.main`);
 const CARD_COUNT = 7;
-const CARD_LOAD_COUNT = 8;
+const CARD_LOAD_COUNT = 8; 
 
 const modifierCl = {
   card: {

@@ -1,12 +1,3 @@
-const arrTitle = [
-  `all`,
-  `overdue`,
-  `today`,
-  `favorites`,
-  `repeating`,
-  `archive`,
-];
-
 export const createFilter = (data) => `
   <section class="main__filter filter container">
     ${data
@@ -14,12 +5,13 @@ export const createFilter = (data) => `
         (elem, ind) => `
       <input
           type="radio"
-          id="filter__${arrTitle[ind]}"
+          id="filter__${elem.title.toLowerCase()}"
           class="filter__input visually-hidden"
           name="filter"
-          ${elem.status ? elem.status : ``}
+          ${elem.isActive ? elem.isActive : ``}
+          ${elem.isDisabled ? elem.isDisabled : ``}
         />
-        <label for="filter__${arrTitle[ind]}" class="filter__label">
+        <label for="filter__${elem.title.toLowerCase()}" class="filter__label">
           ${elem.title} <span class="filter__all-count">${
           elem.count
         }</span></label

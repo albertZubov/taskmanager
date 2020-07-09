@@ -35,28 +35,37 @@ export const getFilter = () => [
   {
     title: `All`,
     count: getCountRandom(1, 100),
-    status: `checked`,
+    isActive: `checked`,
+    isDisabled: null,
   },
   {
     title: `Overdue`,
     count: 0,
-    status: `disabled`,
+    isActive: null,
+    isDisabled: `disabled`,
   },
   {
     title: `Today`,
     count: 0,
-    status: `disabled`,
+    isActive: null,
+    isDisabled: `disabled`,
   },
   {
     title: `Favorites`,
     count: getCountRandom(1, 10),
+    isActive: null,
+    isDisabled: null,
   },
   {
     title: `Repeating`,
     count: getCountRandom(1, 10),
+    isActive: null,
+    isDisabled: null,
   },
   {
     title: `Archive`,
     count: getCountRandom(1, 100),
+    isActive: null,
+    isDisabled: null,
   },
 ];
