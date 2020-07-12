@@ -18,8 +18,5 @@
   },
   "engines": {
     "node": "10"
-  },
-  "dependencies": {
-    "stylelint-config-htmlacademy": "^0.1.4"
   }
 }
