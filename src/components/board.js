@@ -1,30 +1,28 @@
-const arrBtns = [
+const arrBtn = [
   {
     type: `default`,
-    content: `DEFAULT`,
+    contents: `DEFAULT`,
   },
   {
     type: `date-up`,
-    content: `DATE up`,
+    contents: `DATE up`,
   },
   {
     type: `date-down`,
-    content: `DATE down`,
+    contents: `DATE down`,
   },
 ];
 
 export const createBoard = () => `
-  <section class="board container">
-        <div class="board__filter-list">
-        ${arrBtns
-          .map(
-            (elem) =>
-              `<a href="#" class="board__filter" data-sort-type="${elem.type}">
-              SORT BY ${elem.content}
-            </a>`
-          )
-          .join(``)}
-        </div>
-        <div class="board__tasks"></div>
-      </section>
-  `;
+<section class="board container">
+      <div class="board__filter-list">
+      ${arrBtn
+        .map(
+          (elem) =>
+            `<a href="#" class="board__filter" data-sort-type="${elem.type}">SORT BY ${elem.contents}</a>`
+        )
+        .join(``)}
+      </div>
+      <div class="board__tasks"></div>
+    </section>
+`;
