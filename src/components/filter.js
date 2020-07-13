@@ -8,8 +8,8 @@ export const createFilter = (data) => `
           id="filter__${elem.title.toLowerCase()}"
           class="filter__input visually-hidden"
           name="filter"
-          ${elem.isActive === true ? `checked` : ``}
-          ${elem.isDisabled === true || elem.count <= 0 ? `disabled` : ``}
+          ${elem.isActive ? `checked` : ``}
+          ${elem.isDisabled || elem.count <= 0 ? `disabled` : ``}
         />
         <label for="filter__${elem.title.toLowerCase()}" class="filter__label">
           ${elem.title} <span class="filter__all-count">${
