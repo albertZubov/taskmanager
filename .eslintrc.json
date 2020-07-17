@@ -1,0 +1,21 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 2015,
+    "sourceType": "module"
+  },
+  "env": {
+    "es6": true,
+    "browser": true,
+    "commonjs": true,
+    "node": true
+  },
+  "extends": "htmlacademy/es6",
+  "rules": {
+    "indent": [
+      "error",
+      2,
+      { "FunctionExpression": { "body": 1, "parameters": 1 } }
+    ],
+    "object-curly-spacing": ["error", "always", { "objectsInObjects": true }]
+  }
+}
