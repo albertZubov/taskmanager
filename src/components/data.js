@@ -29,6 +29,10 @@ export const getCard = () => ({
   isDate: getRandomBoolean(),
   isRepeat: getRandomBoolean(),
   date: new Date(),
+  modifierCl: {
+    edit: `edit`,
+    repeat: `repeat`,
+  },
 });
 
 export const getFilter = () => [

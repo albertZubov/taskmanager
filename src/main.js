@@ -11,23 +11,6 @@ const main = document.querySelector(`.main`);
 const CARD_COUNT = 8;
 const CARD_LOAD_COUNT = 8;
 
-const modifierCl = {
-  card: {
-    color: {
-      black: `black`,
-      yellow: `yellow`,
-    },
-    edit: `edit`,
-    repeat: `repeat`,
-  },
-  btn: {
-    edit: `edit`,
-    archive: `archive`,
-    favorites: `favorites`,
-    disabled: `disabled`,
-  },
-};
-
 // Очистка main
 const controlRemove = main.querySelector(`.control`);
 main.removeChild(controlRemove);
@@ -58,11 +41,7 @@ const boardTask = boardElem.querySelector(`.board__tasks`);
 
 const renderCard = (data) => {
   const card = new Card(data);
-  const cardEdit = new CardEdit(
-    modifierCl.card.edit,
-    modifierCl.card.repeat,
-    getCard()
-  );
+  const cardEdit = new CardEdit(data);
 
   const onEscKeyDown = (evt) => {
     if (evt.key === `Escape` || evt.key === `Esc`) {
