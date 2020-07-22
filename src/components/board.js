@@ -13,7 +13,8 @@ const arrBtn = [
   },
 ];
 
-export const createBoard = () => `
+export const createBoard = () => {
+  return `
 <section class="board container">
       <div class="board__filter-list">
       ${arrBtn
@@ -26,3 +27,4 @@ export const createBoard = () => `
       <div class="board__tasks"></div>
     </section>
 `;
+};
