@@ -1,8 +1,11 @@
 import { createElement } from "./utils.js";
+const modifierCl = {
+  edit: `edit`,
+  repeat: `repeat`,
+};
 
 export class CardEdit {
-  constructor({ color, description, isDate, date, isRepeat, modifierCl }) {
-    this._modifierCl = modifierCl;
+  constructor({ color, description, isDate, date, isRepeat }) {
     this._color = color;
     this._description = description;
     this._isDate = isDate;
@@ -20,9 +23,9 @@ export class CardEdit {
 
   getTemplate() {
     return `
-    <article class="card card--${this._modifierCl.edit} card--${
-      this._color
-    } card--${this._modifierCl.repeat}">
+    <article class="card card--${modifierCl.edit} card--${this._color} card--${
+      modifierCl.repeat
+    }">
     <form class="card__form" method="get">
       <div class="card__inner">
         <div class="card__color-bar">

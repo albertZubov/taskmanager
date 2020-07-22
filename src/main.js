@@ -10,7 +10,7 @@ import { getCard, getFilter } from "./components/data";
 const main = document.querySelector(`.main`);
 const CARD_COUNT = 8;
 const CARD_LOAD_COUNT = 8;
-
+ 
 // Очистка main
 const controlRemove = main.querySelector(`.control`);
 main.removeChild(controlRemove);
