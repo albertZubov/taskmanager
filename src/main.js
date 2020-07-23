@@ -6,14 +6,26 @@ import { createFilter } from "./components/filter";
 import { createLoadMore } from "./components/load-more";
 import { createMenu } from "./components/menu";
 import { getCard, getFilter } from "./components/data";
+import { NoCard } from "./components/no-card";
 
 const main = document.querySelector(`.main`);
 const CARD_COUNT = 8;
 const CARD_LOAD_COUNT = 8;
- 
+
 // Очистка main
 const controlRemove = main.querySelector(`.control`);
 main.removeChild(controlRemove);
+const noCard = new NoCard().getElement();
+
+const renderMessageNoCard = () => {
+  if (filterData[0].count === 0) {
+    Array.from(boardElem.children).map((child) => {
+      boardElem.removeChild(child);
+    });
+    main.removeChild(sort[0]);
+    render(boardElem, noCard);
+  }
+};
 
 const render = (container, element) => {
   let childrens = element;
@@ -33,8 +45,9 @@ const render = (container, element) => {
 };
 
 render(main, createMenu());
-render(main, createSearch());
-render(main, createFilter(getFilter()));
+const sort = render(main, createSearch());
+const filterData = getFilter();
+render(main, createFilter(filterData));
 
 const [boardElem] = render(main, createBoard());
 const boardTask = boardElem.querySelector(`.board__tasks`);
@@ -99,3 +112,6 @@ btnLoad.addEventListener(`click`, () => {
     boardTask.children.length < 23 ? `block` : `none`
   }`;
 });
+
+renderMessageNoCard();
+console.log(boardElem);
