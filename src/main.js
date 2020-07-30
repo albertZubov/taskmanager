@@ -1,5 +1,6 @@
 import { createSearch } from "./components/search";
 import { createBoard } from "./components/board";
+import { createBoardFilter } from "./components/board-filter";
 import { Card } from "./components/card";
 import { CardEdit } from "./components/card-edit";
 import { createFilter } from "./components/filter";
@@ -7,111 +8,93 @@ import { createLoadMore } from "./components/load-more";
 import { createMenu } from "./components/menu";
 import { getCard, getFilter } from "./components/data";
 import { NoCard } from "./components/no-card";
+import { render } from "./components/utils";
 
 const main = document.querySelector(`.main`);
-const CARD_COUNT = 8;
+const CARD_COUNT = 0;
 const CARD_LOAD_COUNT = 8;
 
 // Очистка main
 const controlRemove = main.querySelector(`.control`);
 main.removeChild(controlRemove);
+
 const noCard = new NoCard().getElement();
-
 const renderMessageNoCard = () => {
-  if (filterData[0].count === 0) {
-    Array.from(boardElem.children).map((child) => {
-      boardElem.removeChild(child);
-    });
-    main.removeChild(sort[0]);
-    render(boardElem, noCard);
-  }
+  render(render(main, createBoard(``)).shift(), noCard);
 };
 
-const render = (container, element) => {
-  let childrens = element;
+if (CARD_COUNT) {
+  render(main, createMenu());
+  render(main, createSearch());
+  render(main, createFilter(getFilter()));
 
-  if (typeof element === `string`) {
-    const div = document.createElement(`div`);
-    div.innerHTML = element;
-    childrens = Array.from(div.children);
-    childrens.forEach((node) => {
-      container.append(node);
-    });
-  } else {
-    container.append(element);
-  }
+  const boardContainer = render(main, createBoard(createBoardFilter())).shift();
 
-  return childrens;
-};
+  const boardTask = document.createElement(`div`);
+  boardTask.classList.add(`board__tasks`);
+  boardContainer.appendChild(boardTask);
 
-render(main, createMenu());
-const sort = render(main, createSearch());
-const filterData = getFilter();
-render(main, createFilter(filterData));
+  const renderCard = (data) => {
+    const card = new Card(data);
+    const cardEdit = new CardEdit(data);
 
-const [boardElem] = render(main, createBoard());
-const boardTask = boardElem.querySelector(`.board__tasks`);
+    const onEscKeyDown = (evt) => {
+      if (evt.key === `Escape` || evt.key === `Esc`) {
+        boardTask.replaceChild(card.getElement(), cardEdit.getElement());
+        document.removeEventListener(`keydown`, onEscKeyDown);
+      }
+    };
 
-const renderCard = (data) => {
-  const card = new Card(data);
-  const cardEdit = new CardEdit(data);
+    card
+      .getElement()
+      .querySelector(`.card__btn--edit`)
+      .addEventListener(`click`, () => {
+        boardTask.replaceChild(cardEdit.getElement(), card.getElement());
+        document.addEventListener(`keydown`, onEscKeyDown);
+      });
 
-  const onEscKeyDown = (evt) => {
-    if (evt.key === `Escape` || evt.key === `Esc`) {
-      boardTask.replaceChild(card.getElement(), cardEdit.getElement());
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    }
+    cardEdit
+      .getElement()
+      .querySelector(`textarea`)
+      .addEventListener(`focus`, () => {
+        document.removeEventListener(`keydown`, onEscKeyDown);
+      });
+
+    cardEdit
+      .getElement()
+      .querySelector(`textarea`)
+      .addEventListener(`blur`, () => {
+        document.addEventListener(`keydown`, onEscKeyDown);
+      });
+
+    cardEdit
+      .getElement()
+      .querySelector(`.card__save`)
+      .addEventListener(`click`, () => {
+        boardTask.replaceChild(card.getElement(), cardEdit.getElement());
+        document.removeEventListener(`keydown`, onEscKeyDown);
+      });
+
+    render(boardTask, card.getElement());
   };
 
-  card
-    .getElement()
-    .querySelector(`.card__btn--edit`)
-    .addEventListener(`click`, () => {
-      boardTask.replaceChild(cardEdit.getElement(), card.getElement());
-      document.addEventListener(`keydown`, onEscKeyDown);
-    });
+  const getArrDataCards = (count) => new Array(count).fill(``).map(getCard);
+  const renderCardsArray = (count) =>
+    getArrDataCards(count).forEach((data) => renderCard(data));
 
-  cardEdit
-    .getElement()
-    .querySelector(`textarea`)
-    .addEventListener(`focus`, () => {
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    });
+  renderCardsArray(CARD_COUNT);
+  render(boardContainer, createLoadMore());
 
-  cardEdit
-    .getElement()
-    .querySelector(`textarea`)
-    .addEventListener(`blur`, () => {
-      document.addEventListener(`keydown`, onEscKeyDown);
-    });
+  const btnLoad = boardContainer.querySelector(`.load-more`);
+  btnLoad.addEventListener(`click`, () => {
+    renderCardsArray(CARD_LOAD_COUNT);
 
-  cardEdit
-    .getElement()
-    .querySelector(`.card__save`)
-    .addEventListener(`click`, () => {
-      boardTask.replaceChild(card.getElement(), cardEdit.getElement());
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    });
-
-  render(boardTask, card.getElement());
-};
-
-const arrDataCards = (count) => new Array(count).fill(``).map(getCard);
-const arrCards = (count) =>
-  arrDataCards(count).forEach((data) => renderCard(data));
-
-arrCards(CARD_COUNT);
-
-render(boardElem, createLoadMore());
-
-const btnLoad = boardElem.querySelector(`.load-more`);
-btnLoad.addEventListener(`click`, () => {
-  arrCards(CARD_LOAD_COUNT);
-
-  btnLoad.style = `display: ${
-    boardTask.children.length < 23 ? `block` : `none`
-  }`;
-});
-
-renderMessageNoCard();
-console.log(boardElem);
+    btnLoad.style = `display: ${
+      boardTask.children.length < 23 ? `block` : `none`
+    }`;
+  });
+} else {
+  render(main, createMenu());
+  render(main, createFilter(getFilter())).shift();
+  renderMessageNoCard();
+}
