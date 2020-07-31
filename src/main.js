@@ -11,7 +11,7 @@ import { NoCard } from "./components/no-card";
 import { render } from "./components/utils";
 
 const main = document.querySelector(`.main`);
-const CARD_COUNT = 0;
+const CARD_COUNT = 8;
 const CARD_LOAD_COUNT = 8;
 
 // Очистка main
@@ -44,6 +44,8 @@ if (CARD_COUNT) {
         document.removeEventListener(`keydown`, onEscKeyDown);
       }
     };
+
+    console.log(boardTask);
 
     card
       .getElement()
