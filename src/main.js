@@ -20,19 +20,17 @@ main.removeChild(controlRemove);
 
 const noCard = new NoCard().getElement();
 const renderMessageNoCard = () => {
-  render(render(main, createBoard(``)).shift(), noCard);
+  render(render(main, createBoard())[0], noCard);
 };
 
+render(main, createMenu());
+render(main, createFilter(getFilter()));
+
 if (CARD_COUNT) {
-  render(main, createMenu());
   render(main, createSearch());
-  render(main, createFilter(getFilter()));
 
-  const boardContainer = render(main, createBoard(createBoardFilter())).shift();
-
-  const boardTask = document.createElement(`div`);
-  boardTask.classList.add(`board__tasks`);
-  boardContainer.appendChild(boardTask);
+  const [boardContainer] = render(main, createBoard(createBoardFilter()));
+  const [, boardTask] = boardContainer.children;
 
   const renderCard = (data) => {
     const card = new Card(data);
@@ -44,8 +42,6 @@ if (CARD_COUNT) {
         document.removeEventListener(`keydown`, onEscKeyDown);
       }
     };
-
-    console.log(boardTask);
 
     card
       .getElement()
@@ -96,7 +92,5 @@ if (CARD_COUNT) {
     }`;
   });
 } else {
-  render(main, createMenu());
-  render(main, createFilter(getFilter())).shift();
   renderMessageNoCard();
 }
