@@ -1,24 +1,17 @@
-import { createElement } from "./utils.js";
+import { AbstractComponent } from "./absctract-component";
 const modifierCl = {
   edit: `edit`,
   repeat: `repeat`,
 };
 
-export class CardEdit {
+export class CardEdit extends AbstractComponent {
   constructor({ color, description, isDate, date, isRepeat }) {
+    super();
     this._color = color;
     this._description = description;
     this._isDate = isDate;
     this._date = date;
     this._isRepeat = isRepeat;
-    this._element = null;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
   }
 
   getTemplate() {
