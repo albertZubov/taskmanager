@@ -26,6 +26,7 @@ export class BoardController {
     this._cards = cards;
     this._board = new Board();
     this._sort = new Sort();
+    this._renderCard = this._renderCard.bind(this);
   }
 
   init() {
@@ -52,7 +53,7 @@ export class BoardController {
       render(boardContainer, this._container);
 
       const renderCardsArray = (arrData) => {
-        arrData.forEach((cardData) => this._renderCard(cardData));
+        arrData.forEach(this._renderCard);
       };
 
       renderCardsArray(this._cards);
@@ -136,25 +137,19 @@ export class BoardController {
       case `date-up`:
         const sortedDateUp = this._cards
           .slice()
-          .sort(
-            (first, last) =>
-              Date.parse(first.dueDate) - Date.parse(last.dueDate)
-          );
-        sortedDateUp.forEach((data) => this._renderCard(data));
+          .sort((first, last) => first.dueDate - last.dueDate);
+        sortedDateUp.forEach(this._renderCard);
         break;
 
       case `date-down`:
         const sortedDateDown = this._cards
           .slice()
-          .sort(
-            (first, last) =>
-              Date.parse(last.dueDate) - Date.parse(first.dueDate)
-          );
-        sortedDateDown.forEach((data) => this._renderCard(data));
+          .sort((first, last) => last.dueDate - first.dueDate);
+        sortedDateDown.forEach(this._renderCard);
         break;
 
       case `default`:
-        this._cards.forEach((data) => this._renderCard(data));
+        this._cards.forEach(this._renderCard);
         break;
     }
   }
