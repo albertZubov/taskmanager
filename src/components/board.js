@@ -116,6 +116,18 @@ export class BoardController {
       .querySelector(`.card__save`)
       .addEventListener(`click`, () => {
         this._container.replaceChild(card.getElement(), cardEdit.getElement());
+
+        const formData = new FormData(
+          cardEdit.getElement().querySelector(`.card-form`)
+        );
+
+        const entry = {
+          description: formData.get(`text`),
+          color: formData.get(`color`),
+          tags: new Set(formData.getAll(`hashtag`)),
+          dueDate: new Date(formData.get(`date`)),
+        };
+
         document.removeEventListener(`keydown`, onEscKeyDown);
       });
 

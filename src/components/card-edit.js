@@ -5,13 +5,14 @@ const modifierCl = {
 };
 
 export class CardEdit extends AbstractComponent {
-  constructor({ color, description, isDate, date, isRepeat }) {
+  constructor({ color, description, isDate, date, isRepeat, tags }) {
     super();
     this._color = color;
     this._description = description;
     this._isDate = isDate;
     this._date = date;
     this._isRepeat = isRepeat;
+    this._tags = tags;
   }
 
   getTemplate() {
@@ -141,6 +142,25 @@ export class CardEdit extends AbstractComponent {
                   >
                 </div>
               </fieldset>
+            </div>
+
+            <div class="card__hashtag">
+              <div class="card__hashtag-list">
+                ${Array.from(this._tags)
+                  .map(
+                    (tag) => `<span class="card__hashtag-inner">
+                      <input type="hidden" name="hashtag" value="${tag}" class="card__hashtag-hidden-input">
+                      <button type="button" class="card__hashtag-name">#${tag}</button>
+                      <button type="button" class="card__hashtag-delete">
+                        delete
+                      </button>
+                      </span>`
+                  )
+                  .join(``)}
+              </div>  
+              <label>
+                <input type="text" class="card__hashtag-input" name="hashtag-input" placeholder="Type new hashtag here">
+              </label>      
             </div>
           </div>
     
