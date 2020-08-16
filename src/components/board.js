@@ -1,5 +1,5 @@
 import { AbstractComponent } from "./absctract-component";
-import { render } from "./utils";
+import { render, unrender } from "./utils";
 import { createMenu } from "./menu";
 import { createFilter } from "./filter";
 import { getFilter } from "./data";
@@ -78,6 +78,11 @@ export class BoardController {
       .addEventListener(`click`, (evt) => this._onClickSort(evt));
   }
 
+  _renderBoardTasks(cards) {
+    this._container.innerHTML = ``;
+    cards.forEach(this._renderCard);
+  }
+
   _renderCard(data) {
     const card = new Card(data);
     const cardEdit = new CardEdit(data);
@@ -118,7 +123,7 @@ export class BoardController {
         this._container.replaceChild(card.getElement(), cardEdit.getElement());
 
         const formData = new FormData(
-          cardEdit.getElement().querySelector(`.card-form`)
+          cardEdit.getElement().querySelector(`.card__form`)
         );
 
         const entry = {
@@ -126,7 +131,26 @@ export class BoardController {
           color: formData.get(`color`),
           tags: new Set(formData.getAll(`hashtag`)),
           dueDate: new Date(formData.get(`date`)),
+          dueTime: new Date(formData.get(`date`)),
+          repeatingDays: formData.getAll(`repeat`).reduce(
+            (acc, it) => {
+              acc[it] = true;
+              return acc;
+            },
+            {
+              mo: false,
+              tu: false,
+              we: false,
+              th: false,
+              fr: false,
+              sa: false,
+              su: false,
+            }
+          ),
         };
+
+        this._cards[this._cards.findIndex((item) => item === data)] = entry;
+        this._renderBoardTasks(this._cards);
 
         document.removeEventListener(`keydown`, onEscKeyDown);
       });
