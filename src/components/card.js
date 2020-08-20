@@ -1,8 +1,17 @@
 import { AbstractComponent } from "./absctract-component";
 
 export class Card extends AbstractComponent {
-  constructor({ description, dueDate, repeatingDays, tags, color, dueTime }) {
+  constructor({
+    description,
+    dueDate,
+    repeatingDays,
+    tags,
+    color,
+    dueTime,
+    isRepeat,
+  }) {
     super();
+    this._isRepeat = isRepeat;
     this._description = description;
     this._dueDate = dueDate;
     this._repeatingDays = repeatingDays;
@@ -14,9 +23,7 @@ export class Card extends AbstractComponent {
   getTemplate() {
     return `
     <article class="card card--${this._color} ${
-      Object.keys(this._repeatingDays).some((day) => this._repeatingDays[day])
-        ? `card--repeat`
-        : ``
+      this._isRepeat ? `card--repeat` : ``
     }">
       <div class="card__form">
         <div class="card__inner">
@@ -31,7 +38,7 @@ export class Card extends AbstractComponent {
               type="button" 
               class="card__btn card__btn---favorites card__btn--disabled"
             >
-            favorites
+            favorites 
             </button>
           </div>
     

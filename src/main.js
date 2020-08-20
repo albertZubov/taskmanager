@@ -1,4 +1,4 @@
-import { BoardController } from "./components/board";
+import { BoardController } from "./controllers/board";
 import { CardList } from "./components/card-list";
 import { getCard } from "./components/data";
 
