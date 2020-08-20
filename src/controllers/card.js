@@ -1,6 +1,7 @@
 import { Card } from "../components/card";
 import { CardEdit } from "../components/card-edit";
 import { render } from "../components/utils";
+import flatpickr from "flatpickr";
 
 export class CardController {
   constructor(container, data, onDataChange, onChangeView) {
@@ -15,6 +16,12 @@ export class CardController {
   }
 
   create() {
+    /*     flatpickr(this._cardEdit.getElement().querySelector(`.card__date`), {
+      altInput: true,
+      allowInput: true,
+      defaultDate: this._data.dueDate,
+    }); */
+
     const onEscKeyDown = (evt) => {
       if (evt.key === `Escape` || evt.key === `Esc`) {
         this._container.replaceChild(
