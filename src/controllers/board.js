@@ -72,26 +72,31 @@ export class BoardController {
       .addEventListener(`click`, (evt) => this._onClickSort(evt));
   }
 
+  _cleanContainer() {
+    this._container.innerHTML = ``;
+    this._subscriptions.length = 0;
+  }
+
   _renderCard(card) {
-    const taskController = new CardController(
+    const cardController = new CardController(
       this._container,
       card,
       this._onDataChange,
       this._onChangeView
     );
 
-    this._subscriptions.push(
-      taskController.setDefaultView.bind(taskController)
-    );
+    this._subscriptions.push(cardController);
   }
 
   _onChangeView() {
-    this._subscriptions.forEach((subscription) => subscription());
+    this._subscriptions.forEach((subscriptionItem) =>
+      subscriptionItem.setDefaultView()
+    );
   }
 
   _onDataChange(newData, oldData) {
     this._cards[this._cards.findIndex((item) => item === oldData)] = newData;
-    this._container.innerHTML = ``;
+    this._cleanContainer();
     this._cards.forEach(this._renderCard);
   }
 
@@ -102,7 +107,7 @@ export class BoardController {
       return;
     }
 
-    this._container.innerHTML = ``;
+    this._cleanContainer();
 
     /* eslint-disable */
 

@@ -1,4 +1,7 @@
 import { AbstractComponent } from "./absctract-component";
+import "flatpickr/dist/flatpickr.min.css";
+import "flatpickr/dist/themes/light.css";
+
 const modifierCl = {
   edit: `edit`,
   repeat: `repeat`,
