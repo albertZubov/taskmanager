@@ -34,9 +34,9 @@ export class CardEdit extends AbstractComponent {
 
   getTemplate() {
     return `
-    <article class="card card--${modifierCl.edit} card--${this._color} card--${
-      modifierCl.repeat
-    }">
+    <article class="card card--${modifierCl.edit} card--${this._color} ${
+      this._isRepeat ? `card--${modifierCl.repeat}` : ``
+    } ">
     <form class="card__form" method="get">
       <div class="card__inner">
         <div class="card__color-bar">
@@ -206,7 +206,6 @@ export class CardEdit extends AbstractComponent {
                 class="card__color-input card__color-input--yellow visually-hidden"
                 name="color"
                 value="yellow"
-                checked
               />
               <label
                 for="color-yellow-4"
