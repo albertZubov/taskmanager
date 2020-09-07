@@ -1,24 +1,43 @@
 import { AbstractComponent } from "./absctract-component";
+import "flatpickr/dist/flatpickr.min.css";
+import "flatpickr/dist/themes/light.css";
+
 const modifierCl = {
   edit: `edit`,
   repeat: `repeat`,
 };
 
 export class CardEdit extends AbstractComponent {
-  constructor({ color, description, isDate, date, isRepeat }) {
+  constructor({
+    color,
+    description,
+    isDate,
+    dueDate,
+    isRepeat,
+    tags,
+    repeatingDays,
+  }) {
     super();
     this._color = color;
     this._description = description;
     this._isDate = isDate;
-    this._date = date;
+    this._dueDate = dueDate;
     this._isRepeat = isRepeat;
+    this._tags = tags;
+    this._repeatingDays = repeatingDays;
+
+    this._subscribeOnEvents(this._date);
+    this._dateShow();
+    this._repeatDaysShow();
+    this._btnRemoveHashtag();
+    this._selectColor();
   }
 
   getTemplate() {
     return `
-    <article class="card card--${modifierCl.edit} card--${this._color} card--${
-      modifierCl.repeat
-    }">
+    <article class="card card--${modifierCl.edit} card--${this._color} ${
+      this._isRepeat ? `card--${modifierCl.repeat}` : ``
+    } ">
     <form class="card__form" method="get">
       <div class="card__inner">
         <div class="card__color-bar">
@@ -46,14 +65,16 @@ export class CardEdit extends AbstractComponent {
                 }</span>
               </button>
     
-              <fieldset class="card__date-deadline">
+              <fieldset class="card__date-deadline" style="display:${
+                this._isDate ? this._hideIsBlock(this._isDate) : `none`
+              }" >
                 <label class="card__input-deadline-wrap">
                   <input
                     class="card__date"
                     type="text"
                     placeholder=""
                     name="date"
-                    value="${this._date}"
+                    value="${this._dueDate.toDateString()}"
                   />
                 </label>
               </fieldset>
@@ -64,7 +85,9 @@ export class CardEdit extends AbstractComponent {
                 }</span>
               </button>
     
-              <fieldset class="card__repeat-days">
+              <fieldset class="card__repeat-days" style="display:${
+                this._isRepeat ? this._hideIsBlock(this._isRepeat) : `none`
+              }">
                 <div class="card__repeat-days-inner">
                   <input
                     class="visually-hidden card__repeat-day-input"
@@ -142,6 +165,25 @@ export class CardEdit extends AbstractComponent {
                 </div>
               </fieldset>
             </div>
+
+            <div class="card__hashtag">
+              <div class="card__hashtag-list"> 
+                ${Array.from(this._tags)
+                  .map(
+                    (tag) => `<span class="card__hashtag-inner">
+                      <input type="hidden" name="hashtag" value="${tag}" class="card__hashtag-hidden-input">
+                      <button type="button" class="card__hashtag-name">#${tag}</button>
+                      <button type="button" class="card__hashtag-delete">
+                        delete
+                      </button>
+                      </span>`
+                  )
+                  .join(``)}
+              </div>  
+              <label>
+                <input type="text" class="card__hashtag-input" name="hashtag-input" placeholder="Type new hashtag here">
+              </label>      
+            </div>
           </div>
     
           <div class="card__colors-inner">
@@ -165,7 +207,6 @@ export class CardEdit extends AbstractComponent {
                 class="card__color-input card__color-input--yellow visually-hidden"
                 name="color"
                 value="yellow"
-                checked
               />
               <label
                 for="color-yellow-4"
@@ -220,5 +261,124 @@ export class CardEdit extends AbstractComponent {
     </form>
     </article>
     `;
+  }
+
+  _selectColor() {
+    this.getElement()
+      .querySelectorAll(`.card__color-input`)
+      .forEach((color) => {
+        if (color.value === this._color) {
+          color.checked = true;
+        }
+      });
+  }
+
+  _removeHashtag(parent) {
+    return parent.parentNode.parentNode.removeChild(parent.parentNode);
+  }
+
+  _btnRemoveHashtag() {
+    const buttonsRemoveHashtags = this.getElement().querySelectorAll(
+      `.card__hashtag-delete`
+    );
+    buttonsRemoveHashtags.forEach((btn) => {
+      btn.addEventListener(`click`, () => {
+        this._removeHashtag(btn);
+      });
+    });
+  }
+
+  _subscribeOnEvents() {
+    this.getElement()
+      .querySelector(`.card__hashtag-input`)
+      .addEventListener(`keydown`, (evt) => {
+        if (evt.key === `Enter`) {
+          evt.preventDefault();
+          this.getElement()
+            .querySelector(`.card__hashtag-list`)
+            .insertAdjacentHTML(
+              `beforeend`,
+              `<span class="card__hashtag-inner">
+          <input
+            type="hidden"
+            name="hashtag"
+            value="${evt.target.value}"
+            class="card__hashtag-hidden-input"
+          />
+          <p class="card__hashtag-name">
+            #${evt.target.value}
+          </p>
+          <button type="button" class="card__hashtag-delete">
+            delete
+          </button>
+        </span>`
+            );
+          const arrHashtags = this.getElement().querySelectorAll(
+            `.card__hashtag-delete`
+          );
+          const lastHashtag = arrHashtags[arrHashtags.length - 1];
+          lastHashtag.addEventListener(`click`, () => {
+            this._removeHashtag(lastHashtag);
+          });
+
+          evt.target.value = ``;
+        }
+      });
+  }
+
+  _hideIsBlock(boolean) {
+    return `display: ${!boolean ? `block` : `none`}`;
+  }
+
+  _dateShow() {
+    const dateDeadline = this.getElement().querySelector(
+      `.card__date-deadline`
+    );
+    const dateInput = dateDeadline.querySelector(`.card__date`);
+    const dateValue = dateInput.value;
+
+    this.getElement()
+      .querySelector(`.card__date-deadline-toggle`)
+      .addEventListener(`click`, () => {
+        dateDeadline.style = this._hideIsBlock(this._isDate);
+
+        this.getElement().querySelector(`.card__date-status`).textContent = `${
+          this._isDate ? `no` : `yes`
+        }`;
+
+        dateInput.value = !this._isDate ? dateValue : ``;
+
+        this._isDate = !this._isDate;
+      });
+  }
+
+  _repeatCheck() {
+    this._isRepeat
+      ? this.getElement().classList.remove(`card--repeat`)
+      : this.getElement().classList.add(`card--repeat`);
+  }
+
+  _repeatDaysShow() {
+    const repeatDays = this.getElement().querySelector(`.card__repeat-days`);
+    const repeatDaysInner = repeatDays.querySelector(
+      `.card__repeat-days-inner`
+    );
+
+    this.getElement()
+      .querySelector(`.card__repeat-toggle`)
+      .addEventListener(`click`, () => {
+        repeatDays.style = this._hideIsBlock(this._isRepeat);
+
+        this._isRepeat
+          ? repeatDays.removeChild(repeatDaysInner)
+          : repeatDays.appendChild(repeatDaysInner);
+
+        const repeatStatus = this.getElement().querySelector(
+          `.card__repeat-status`
+        );
+        repeatStatus.textContent = `${this._isRepeat ? `no` : `yes`}`;
+        this._repeatCheck();
+        this._isRepeat = !this._isRepeat;
+      });
   }
 }

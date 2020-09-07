@@ -21,8 +21,8 @@ export const render = (container, element) => {
   return childrens;
 };
 
-/* const unrender = (element) => {
+export const unrender = (element) => {
   if (element) {
     element.remove();
   }
-}; */
+};
