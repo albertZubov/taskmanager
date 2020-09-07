@@ -9,22 +9,11 @@ export class CardController {
     this._data = data;
     this._card = new Card(data);
     this._cardEdit = new CardEdit(data);
-    this._currentColor = this._cardEdit.getElement().classList[2];
+    this._currentColor = this._data.color;
 
     this._onDataChange = onDataChange;
     this._onChangeView = onChangeView;
     this.create();
-  }
-
-  _selectColor() {
-    this._cardEdit
-      .getElement()
-      .querySelectorAll(`.card__color-input`)
-      .forEach((color) => {
-        if (color.value === this._data.color) {
-          color.checked = true;
-        }
-      });
   }
 
   create() {
@@ -112,23 +101,21 @@ export class CardController {
         document.removeEventListener(`keydown`, onEscKeyDown);
       });
 
-    const colorCard = this._cardEdit
+    this._cardEdit
       .getElement()
-      .querySelectorAll(`.card__color`);
-    colorCard.forEach((color) => {
-      color.addEventListener(`click`, () => {
+      .querySelector(`.card__colors-wrap`)
+      .addEventListener(`click`, (evt) => {
+        if (evt.target.tagName !== `INPUT`) {
+          return;
+        }
+
         const classDomList = this._cardEdit.getElement().classList;
-        const classColor = Array.from(classDomList).find(
-          (elem) => elem === `card--${this._data.color}`
-        );
-        this._data.color = color.textContent;
-        classDomList.remove(classColor);
-        classDomList.add(`card--${color.textContent}`);
+        classDomList.remove(`card--${this._currentColor}`);
+        classDomList.add(`card--${evt.target.value}`);
+        this._currentColor = evt.target.value;
       });
-    });
 
     render(this._container, this._card.getElement());
-    this._selectColor();
   }
 
   setDefaultView() {

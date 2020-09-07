@@ -30,6 +30,7 @@ export class CardEdit extends AbstractComponent {
     this._dateShow();
     this._repeatDaysShow();
     this._btnRemoveHashtag();
+    this._selectColor();
   }
 
   getTemplate() {
@@ -166,7 +167,7 @@ export class CardEdit extends AbstractComponent {
             </div>
 
             <div class="card__hashtag">
-              <div class="card__hashtag-list">
+              <div class="card__hashtag-list"> 
                 ${Array.from(this._tags)
                   .map(
                     (tag) => `<span class="card__hashtag-inner">
@@ -260,6 +261,16 @@ export class CardEdit extends AbstractComponent {
     </form>
     </article>
     `;
+  }
+
+  _selectColor() {
+    this.getElement()
+      .querySelectorAll(`.card__color-input`)
+      .forEach((color) => {
+        if (color.value === this._color) {
+          color.checked = true;
+        }
+      });
   }
 
   _removeHashtag(parent) {
