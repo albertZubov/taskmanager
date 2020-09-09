@@ -1,8 +1,18 @@
 import { AbstractComponent } from "./absctract-component";
+import moment from "moment";
 
 export class Card extends AbstractComponent {
-  constructor({ description, dueDate, repeatingDays, tags, color, dueTime }) {
+  constructor({
+    description,
+    dueDate,
+    repeatingDays,
+    tags,
+    color,
+    dueTime,
+    isRepeat,
+  }) {
     super();
+    this._isRepeat = isRepeat;
     this._description = description;
     this._dueDate = dueDate;
     this._repeatingDays = repeatingDays;
@@ -14,9 +24,7 @@ export class Card extends AbstractComponent {
   getTemplate() {
     return `
     <article class="card card--${this._color} ${
-      Object.keys(this._repeatingDays).some((day) => this._repeatingDays[day])
-        ? `card--repeat`
-        : ``
+      this._isRepeat ? `card--repeat` : ``
     }">
       <div class="card__form">
         <div class="card__inner">
@@ -31,7 +39,7 @@ export class Card extends AbstractComponent {
               type="button" 
               class="card__btn card__btn---favorites card__btn--disabled"
             >
-            favorites
+            favorites 
             </button>
           </div>
     
@@ -50,7 +58,9 @@ export class Card extends AbstractComponent {
               <div class="card__dates">
                 <div class="card__date-deadline">
                   <p class="card__input-deadline-wrap">
-                    <span class="card__date">${this._dueDate.toDateString()}</span>
+                    <span class="card__date">${moment(this._dueDate).format(
+                      "D MMMM GGGG"
+                    )}</span>
                     <span class="card__time">${this._dueTime.getHours()} : ${this._dueTime.getMinutes()}</span>
                   </p>
                 </div>
