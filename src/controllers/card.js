@@ -3,10 +3,16 @@ import { CardEdit } from "../components/card-edit";
 import { render } from "../components/utils";
 import flatpickr from "flatpickr";
 
+export const modeCard = {
+  add: `adding`,
+  default: `default`,
+};
+
 export class CardController {
-  constructor(container, data, onDataChange, onChangeView) {
+  constructor(container, data, onDataChange, onChangeView, mode) {
     this._container = container;
     this._data = data;
+    this._mode = mode;
     this._card = new Card(data);
     this._cardEdit = new CardEdit(data);
     this._currentColor = this._data.color;
@@ -17,6 +23,12 @@ export class CardController {
   }
 
   create() {
+    let currentView = this._card;
+
+    if (this._mode === modeCard.add) {
+      currentView = this._cardEdit;
+    }
+
     flatpickr(this._cardEdit.getElement().querySelector(`.card__date`), {
       altInput: true,
       allowInput: true,
@@ -25,10 +37,17 @@ export class CardController {
 
     const onEscKeyDown = (evt) => {
       if (evt.key === `Escape` || evt.key === `Esc`) {
-        this._container.replaceChild(
-          this._card.getElement(),
-          this._cardEdit.getElement()
-        );
+        if (this._mode === modeCard.default) {
+          if (this._container.contains(this._cardEdit.getElement())) {
+            this._container.replaceChild(
+              this._card.getElement(),
+              this._cardEdit.getElement()
+            );
+          }
+        } else if (this._mode === modeCard.add) {
+          this._container.removeChild(currentView.getElement());
+        }
+
         document.removeEventListener(`keydown`, onEscKeyDown);
       }
     };
@@ -57,6 +76,13 @@ export class CardController {
       .querySelector(`textarea`)
       .addEventListener(`blur`, () => {
         document.addEventListener(`keydown`, onEscKeyDown);
+      });
+
+    this._cardEdit
+      .getElement()
+      .querySelector(`.card__delete`)
+      .addEventListener(`click`, () => {
+        this._onDataChange(null, this._data);
       });
 
     this._cardEdit
@@ -96,7 +122,10 @@ export class CardController {
             }
           ),
         };
-        this._onDataChange(entry, this._data);
+        this._onDataChange(
+          entry,
+          this._mode === modeCard.default ? this._data : null
+        );
 
         document.removeEventListener(`keydown`, onEscKeyDown);
       });
@@ -115,7 +144,7 @@ export class CardController {
         this._currentColor = evt.target.value;
       });
 
-    render(this._container, this._card.getElement());
+    render(this._container, currentView.getElement());
   }
 
   setDefaultView() {
