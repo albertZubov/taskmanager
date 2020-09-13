@@ -11,7 +11,7 @@ import { Board } from "./components/board";
 import { MainController } from "./controllers/main";
 import { Statistics } from "./components/statistics";
 
-const CARD_COUNT = 8;
+export const CARD_COUNT = 8;
 const board = new Board();
 const boardTask = new CardList().getElement();
 const statistics = new Statistics().getElement();

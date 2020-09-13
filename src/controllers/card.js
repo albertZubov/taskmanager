@@ -2,6 +2,7 @@ import { Card } from "../components/card";
 import { CardEdit } from "../components/card-edit";
 import { render } from "../components/utils";
 import flatpickr from "flatpickr";
+import { CARD_COUNT } from "../main";
 
 export const modeCard = {
   add: `adding`,
@@ -122,6 +123,7 @@ export class CardController {
             }
           ),
         };
+
         this._onDataChange(
           entry,
           this._mode === modeCard.default ? this._data : null

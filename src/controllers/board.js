@@ -17,6 +17,7 @@ export class BoardController {
   }
 
   init() {
+    console.log(this._cards.length);
     const CARD_LOAD_COUNT = 8;
 
     const boardContainer = render(main, this._board.getElement());
@@ -72,11 +73,13 @@ export class BoardController {
   _onDataChange(newData, oldData) {
     const index = this._cards.findIndex((card) => card === oldData);
 
-    if (newData === null) {
+    if (newData === null && this._cards.includes(oldData)) {
       this._cards = [
         ...this._cards.slice(0, index),
         ...this._cards.slice(index + 1),
       ];
+    } else if (oldData === null) {
+      this._cards = [...this._cards, newData];
     } else {
       this._cards[index] = newData;
     }

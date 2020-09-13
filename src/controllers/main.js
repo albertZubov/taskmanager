@@ -7,7 +7,7 @@ export class MainController {
 
   create() {
     this._menu.addEventListener(`change`, (evt) => {
-      // evt.preventDefault();
+      evt.preventDefault();
 
       if (evt.target.tagName !== `INPUT`) {
         return;
