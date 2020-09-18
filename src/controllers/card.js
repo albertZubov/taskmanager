@@ -2,7 +2,6 @@ import { Card } from "../components/card";
 import { CardEdit } from "../components/card-edit";
 import { render } from "../components/utils";
 import flatpickr from "flatpickr";
-import { CARD_COUNT } from "../main";
 
 export const modeCard = {
   add: `adding`,
@@ -30,6 +29,7 @@ export class CardController {
       currentView = this._cardEdit;
     }
 
+    // TODO добавить проверку на добавление
     flatpickr(this._cardEdit.getElement().querySelector(`.card__date`), {
       altInput: true,
       allowInput: true,

@@ -1,45 +1,52 @@
-import { render } from "../components/utils";
-import { createLoadMore } from "../components/load-more";
+import { render, unrender } from "../components/utils";
+import { main } from "../main";
+import { CreateLoadMore } from "../components/load-more";
 import { Sort } from "../components/sort";
-import { getArrDataCards, main } from "../main";
-import { CardController, modeCard } from "./card";
+import { CardListController } from "./card-list";
+
+const CARD_LOAD_COUNT = 8;
 export class BoardController {
   constructor(container, cards, board) {
     this._container = container;
     this._cards = cards;
     this._board = board;
     this._sort = new Sort();
+    this._bntLoadMore = new CreateLoadMore();
+    this._creatingCard = null;
+    this._currentCards = [];
+    this._showedTasks = CARD_LOAD_COUNT;
 
     this._subscriptions = [];
-    this._renderCard = this._renderCard.bind(this);
-    this._onChangeView = this._onChangeView.bind(this);
-    this._onDataChange = this._onDataChange.bind(this);
+    this._cardListController = new CardListController(
+      this._container,
+      this._onDataChange.bind(this)
+    );
   }
 
-  init() {
-    console.log(this._cards.length);
-    const CARD_LOAD_COUNT = 8;
+  show() {
+    if (this.cards !== this._currentCards) {
+      this._currentCards = this._cards;
+      this._renderBoard();
+    }
 
+    this._board.getElement().classList.remove(`visually-hidden`);
+  }
+
+  hide() {
+    this._board.getElement().classList.add(`visually-hidden`);
+  }
+
+  _renderBoard() {
     const boardContainer = render(main, this._board.getElement());
     render(boardContainer, this._sort.getElement());
     render(boardContainer, this._container);
 
-    const renderCardsArray = (arrData) => {
-      arrData.forEach(this._renderCard);
-    };
+    this._cardListController.setCards(this._cards.slice(0, this._showedTasks));
 
-    renderCardsArray(this._cards);
-
-    render(boardContainer, createLoadMore());
-
-    const btnLoad = boardContainer.querySelector(`.load-more`);
-    btnLoad.addEventListener(`click`, () => {
-      renderCardsArray(getArrDataCards(CARD_LOAD_COUNT));
-
-      btnLoad.style = `display: ${
-        this._container.children.length < 23 ? `block` : `none`
-      }`;
-    });
+    render(boardContainer, this._bntLoadMore.getElement());
+    this._bntLoadMore
+      .getElement()
+      .addEventListener(`click`, () => this._onClickBtnLoadMore());
 
     // Повесил обработчик на Сортировку
     this._sort
@@ -52,69 +59,25 @@ export class BoardController {
     this._subscriptions.length = 0;
   }
 
-  _renderCard(card) {
-    const cardController = new CardController(
-      this._container,
-      card,
-      this._onDataChange,
-      this._onChangeView,
-      modeCard.default
-    );
+  _onDataChange(cards) {
+    this._cards = [...cards, ...this._cards.slice(this._showedTasks)];
 
-    this._subscriptions.push(cardController);
-  }
-
-  _onChangeView() {
-    this._subscriptions.forEach((subscriptionItem) =>
-      subscriptionItem.setDefaultView()
-    );
-  }
-
-  _onDataChange(newData, oldData) {
-    const index = this._cards.findIndex((card) => card === oldData);
-
-    if (newData === null && this._cards.includes(oldData)) {
-      this._cards = [
-        ...this._cards.slice(0, index),
-        ...this._cards.slice(index + 1),
-      ];
-    } else if (oldData === null) {
-      this._cards = [...this._cards, newData];
-    } else {
-      this._cards[index] = newData;
-    }
-
-    this._cleanContainer();
-    this._cards.forEach(this._renderCard);
-  }
-
-  show() {
-    this._board.getElement().classList.remove(`visually-hidden`);
-  }
-
-  hide() {
-    this._board.getElement().classList.add(`visually-hidden`);
+    this._renderBoard();
   }
 
   createCard() {
-    const defaultCard = {
-      description: `Find money for travel`,
-      color: `yellow`,
-      tags: new Set(),
-      dueDate: new Date(),
-      dueTime: new Date(),
-      isRepeat: true,
-      isDate: true,
-      repeatingDays: {},
-    };
+    this._cardListController.createCard();
+  }
 
-    new CardController(
-      this._container,
-      defaultCard,
-      this._onDataChange,
-      this._onChangeView,
-      modeCard.add
+  _onClickBtnLoadMore() {
+    this._cardListController.addCards(
+      this._cards.slice(this._showedTasks, this._showedTasks + CARD_LOAD_COUNT)
     );
+    this._showedTasks += CARD_LOAD_COUNT;
+
+    if (this._showedTasks >= this._cards.length) {
+      unrender(this._bntLoadMore.getElement());
+    }
   }
 
   _onClickSort(evt) {
@@ -133,18 +96,25 @@ export class BoardController {
         const sortedDateUp = this._cards
           .slice()
           .sort((first, last) => first.dueDate - last.dueDate);
-        sortedDateUp.forEach(this._renderCard);
+        this._cardListController.setCards(
+          sortedDateUp.slice(0, this._showedTasks)
+        );
+
         break;
 
       case `date-down`:
         const sortedDateDown = this._cards
           .slice()
           .sort((first, last) => last.dueDate - first.dueDate);
-        sortedDateDown.forEach(this._renderCard);
+        this._cardListController.setCards(
+          sortedDateDown.slice(0, this._showedTasks)
+        );
         break;
 
       case `default`:
-        this._cards.forEach(this._renderCard);
+        this._cardListController.setCards(
+          this._cards.slice(0, this._showedTasks)
+        );
         break;
     }
   }
