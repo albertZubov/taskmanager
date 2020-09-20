@@ -1,10 +1,12 @@
 import { AbstractComponent } from "./absctract-component";
 
 export class SearchResultInfo extends AbstractComponent {
-  constructor(title, count) {
+  constructor({ title, count }) {
     super();
     this._title = title;
     this._count = count;
+
+    console.log(this._title);
   }
 
   getTemplate() {

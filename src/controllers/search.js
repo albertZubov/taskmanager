@@ -3,6 +3,7 @@ import { SearchResult } from "../components/search-result";
 import { SearchResultInfo } from "../components/search-result-info";
 import { SearchResultGroup } from "../components/search-result-group";
 import { CardListController } from "./card-list";
+import { SearchResultCards } from "../components/search-result-cards";
 
 export class SearchController {
   constructor(container, search, onBackBtn) {
@@ -13,10 +14,11 @@ export class SearchController {
     this._cards = [];
 
     this._searchResult = new SearchResult();
-    this._searchResultInfo = new SearchResultInfo();
+    this._searchResultCards = new SearchResultCards();
+    this._searchResultInfo = new SearchResultInfo({});
     this._searchResultGroup = new SearchResultGroup();
     this._cardListController = new CardListController(
-      this._searchResultGroup.getElement().querySelector(`.result__cards`),
+      this._searchResultCards.getElement(),
       this._onDataChange.bind(this)
     );
 
@@ -30,10 +32,6 @@ export class SearchController {
     render(
       this._searchResult.getElement(),
       this._searchResultGroup.getElement()
-    );
-    render(
-      this._searchResultGroup.getElement(),
-      this._searchResultInfo.getElement()
     );
 
     this._searchResult
@@ -67,7 +65,6 @@ export class SearchController {
   }
 
   _showSearchResult(text, cards) {
-    console.log(this._searchResultInfo.getElement());
     if (this._searchResultInfo) {
       unrender(this._searchResultInfo.getElement());
       // this._searchResultInfo.removeElement();
@@ -81,6 +78,10 @@ export class SearchController {
     render(
       this._searchResultGroup.getElement(),
       this._searchResultInfo.getElement()
+    );
+    render(
+      this._searchResultGroup.getElement(),
+      this._searchResultCards.getElement()
     );
 
     this._cardListController.setCards(cards);

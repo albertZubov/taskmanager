@@ -762,7 +762,10 @@ body {
 }
 .result__cards {
   display: flex;
-  flex-wrap: wrap;
+  flex-flow: row wrap;
+  align-items: flex-start;
+  min-height: 500px;
+  margin-right: -40px;
 }
 .result__empty {
   text-align: center;
