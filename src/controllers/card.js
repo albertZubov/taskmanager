@@ -29,12 +29,17 @@ export class CardController {
       currentView = this._cardEdit;
     }
 
-    // TODO добавить проверку на добавление
-    flatpickr(this._cardEdit.getElement().querySelector(`.card__date`), {
-      altInput: true,
-      allowInput: true,
-      defaultDate: this._data.dueDate,
-    });
+    const date = this._cardEdit.getElement().querySelector(`.card__date`);
+
+    if (Array.from(date.classList).includes(`flatpickr-input`)) {
+      return;
+    } else {
+      flatpickr(date, {
+        altInput: true,
+        allowInput: true,
+        defaultDate: this._data.dueDate,
+      });
+    }
 
     const onEscKeyDown = (evt) => {
       if (evt.key === `Escape` || evt.key === `Esc`) {

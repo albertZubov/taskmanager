@@ -5,8 +5,6 @@ export class SearchResultInfo extends AbstractComponent {
     super();
     this._title = title;
     this._count = count;
-
-    console.log(this._title);
   }
 
   getTemplate() {

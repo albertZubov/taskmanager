@@ -3,13 +3,15 @@ import { main } from "../main";
 import { CreateLoadMore } from "../components/load-more";
 import { Sort } from "../components/sort";
 import { CardListController } from "./card-list";
+import { CardList } from "../components/card-list";
+import { Board } from "../components/board";
 
 const CARD_LOAD_COUNT = 8;
 export class BoardController {
-  constructor(container, cards, board) {
-    this._container = container;
+  constructor(cards) {
+    this._container = new CardList().getElement();
     this._cards = cards;
-    this._board = board;
+    this._board = new Board();
     this._sort = new Sort();
     this._bntLoadMore = new CreateLoadMore();
     this._creatingCard = null;
@@ -61,7 +63,6 @@ export class BoardController {
 
   _onDataChange(cards) {
     this._cards = [...cards, ...this._cards.slice(this._showedTasks)];
-
     this._renderBoard();
   }
 
