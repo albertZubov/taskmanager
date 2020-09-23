@@ -27,7 +27,7 @@ export class CardListController {
     cards.forEach((card) => {
       this._renderCards(card);
     });
-    this._cards.concat(cards);
+    this._cards = this._cards.concat(cards);
   }
 
   _renderCards(card) {

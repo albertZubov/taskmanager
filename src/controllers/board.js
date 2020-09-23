@@ -16,7 +16,7 @@ export class BoardController {
     this._bntLoadMore = new CreateLoadMore();
     this._creatingCard = null;
     this._currentCards = [];
-    this._showedTasks = CARD_LOAD_COUNT;
+    this._showedCards = CARD_LOAD_COUNT;
 
     this._subscriptions = [];
     this._cardListController = new CardListController(
@@ -43,9 +43,14 @@ export class BoardController {
     render(boardContainer, this._sort.getElement());
     render(boardContainer, this._container);
 
-    this._cardListController.setCards(this._cards.slice(0, this._showedTasks));
-
     render(boardContainer, this._bntLoadMore.getElement());
+
+    if (this._showedCards >= this._cards.length) {
+      unrender(this._bntLoadMore.getElement());
+    }
+
+    this._cardListController.setCards(this._cards.slice(0, this._showedCards));
+
     this._bntLoadMore
       .getElement()
       .addEventListener(`click`, () => this._onClickBtnLoadMore());
@@ -62,7 +67,8 @@ export class BoardController {
   }
 
   _onDataChange(cards) {
-    this._cards = [...cards, ...this._cards.slice(this._showedTasks)];
+    this._cards = [...cards, ...this._cards.slice(this._showedCards)];
+    this._showedCards = this._cards.length;
     this._renderBoard();
   }
 
@@ -72,11 +78,12 @@ export class BoardController {
 
   _onClickBtnLoadMore() {
     this._cardListController.addCards(
-      this._cards.slice(this._showedTasks, this._showedTasks + CARD_LOAD_COUNT)
+      this._cards.slice(this._showedCards, this._showedCards + CARD_LOAD_COUNT)
     );
-    this._showedTasks += CARD_LOAD_COUNT;
 
-    if (this._showedTasks >= this._cards.length) {
+    this._showedCards += CARD_LOAD_COUNT;
+
+    if (this._showedCards >= this._cards.length) {
       unrender(this._bntLoadMore.getElement());
     }
   }
@@ -98,7 +105,7 @@ export class BoardController {
           .slice()
           .sort((first, last) => first.dueDate - last.dueDate);
         this._cardListController.setCards(
-          sortedDateUp.slice(0, this._showedTasks)
+          sortedDateUp.slice(0, this._showedCards)
         );
 
         break;
@@ -108,13 +115,13 @@ export class BoardController {
           .slice()
           .sort((first, last) => last.dueDate - first.dueDate);
         this._cardListController.setCards(
-          sortedDateDown.slice(0, this._showedTasks)
+          sortedDateDown.slice(0, this._showedCards)
         );
         break;
 
       case `default`:
         this._cardListController.setCards(
-          this._cards.slice(0, this._showedTasks)
+          this._cards.slice(0, this._showedCards)
         );
         break;
     }
