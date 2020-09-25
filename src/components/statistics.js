@@ -1,4 +1,6 @@
 import { AbstractComponent } from "./absctract-component";
+import "flatpickr/dist/flatpickr.min.css";
+import "flatpickr/dist/themes/light.css";
 
 export class Statistics extends AbstractComponent {
   getTemplate() {

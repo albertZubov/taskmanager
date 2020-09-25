@@ -68,7 +68,10 @@ export class BoardController {
 
   _onDataChange(cards) {
     this._cards = [...cards, ...this._cards.slice(this._showedCards)];
-    this._showedCards = this._cards.length;
+
+    // Поправить, некорректно отрабатывает
+    this._showedCards = cards.length;
+
     this._renderBoard();
   }
 
