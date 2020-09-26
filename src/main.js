@@ -1,15 +1,10 @@
-import { BoardController } from "./controllers/board";
-import { CardList } from "./components/card-list";
-import { getCard } from "./components/data";
+import { MainController } from "./controllers/main";
 
-const CARD_COUNT = 8;
-const boardTask = new CardList().getElement();
+// Очистка main
+export const main = document.querySelector(`.main`);
+const controlRemove = main.querySelector(`.control`);
+main.removeChild(controlRemove);
 
-export const getArrDataCards = (count) =>
-  new Array(count).fill(``).map(getCard);
-
-const boardController = new BoardController(
-  boardTask,
-  getArrDataCards(CARD_COUNT)
-);
-boardController.init();
+// Запуск контроллера MainController
+const mainController = new MainController();
+mainController._init();

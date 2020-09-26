@@ -1,70 +1,59 @@
-import { render } from "../components/utils";
-import { createMenu } from "../components/menu";
-import { createFilter } from "../components/filter";
-import { getFilter } from "../components/data";
-import { createLoadMore } from "../components/load-more";
-import { createSearch } from "../components/search";
+import { render, unrender } from "../components/utils";
+import { main } from "../main";
+import { CreateLoadMore } from "../components/load-more";
 import { Sort } from "../components/sort";
-import { getArrDataCards } from "../main";
-import { NoCard } from "../components/no-card";
+import { CardListController } from "./card-list";
+import { CardList } from "../components/card-list";
 import { Board } from "../components/board";
-import { CardController } from "./card";
 
+const CARD_LOAD_COUNT = 8;
 export class BoardController {
-  constructor(container, cards) {
-    this._container = container;
+  constructor(cards) {
+    this._container = new CardList().getElement();
     this._cards = cards;
     this._board = new Board();
     this._sort = new Sort();
+    this._bntLoadMore = new CreateLoadMore();
+    this._creatingCard = null;
+    this._currentCards = [];
+    this._showedCards = CARD_LOAD_COUNT;
 
     this._subscriptions = [];
-    this._renderCard = this._renderCard.bind(this);
-    this._onChangeView = this._onChangeView.bind(this);
-    this._onDataChange = this._onDataChange.bind(this);
+    this._cardListController = new CardListController(
+      this._container,
+      this._onDataChange.bind(this)
+    );
   }
 
-  init() {
-    const CARD_LOAD_COUNT = 8;
-
-    // Очистка main
-    const main = document.querySelector(`.main`);
-    const controlRemove = main.querySelector(`.control`);
-    main.removeChild(controlRemove);
-
-    const noCard = new NoCard().getElement();
-    const renderMessageNoCard = () => {
-      render(render(main, this._board.getElement()), noCard);
-    };
-
-    render(main, createMenu());
-    render(main, createFilter(getFilter()));
-
-    if (this._cards.length) {
-      render(main, createSearch());
-
-      const boardContainer = render(main, this._board.getElement());
-      render(boardContainer, this._sort.getElement());
-      render(boardContainer, this._container);
-
-      const renderCardsArray = (arrData) => {
-        arrData.forEach(this._renderCard);
-      };
-
-      renderCardsArray(this._cards);
-
-      render(boardContainer, createLoadMore());
-
-      const btnLoad = boardContainer.querySelector(`.load-more`);
-      btnLoad.addEventListener(`click`, () => {
-        renderCardsArray(getArrDataCards(CARD_LOAD_COUNT));
-
-        btnLoad.style = `display: ${
-          this._container.children.length < 23 ? `block` : `none`
-        }`;
-      });
-    } else {
-      renderMessageNoCard();
+  show() {
+    if (this.cards !== this._currentCards) {
+      this._currentCards = this._cards;
+      this._renderBoard();
     }
+
+    this._board.getElement().classList.remove(`visually-hidden`);
+  }
+
+  hide() {
+    this._board.getElement().classList.add(`visually-hidden`);
+  }
+
+  _renderBoard() {
+    const boardContainer = render(main, this._board.getElement());
+    render(boardContainer, this._sort.getElement());
+    render(boardContainer, this._container);
+
+    render(boardContainer, this._bntLoadMore.getElement());
+
+    if (this._showedCards >= this._cards.length) {
+      unrender(this._bntLoadMore.getElement());
+    }
+
+    this._cardListController.setCards(this._cards.slice(0, this._showedCards));
+
+    this._bntLoadMore
+      .getElement()
+      .addEventListener(`click`, () => this._onClickBtnLoadMore());
 
     // Повесил обработчик на Сортировку
     this._sort
@@ -77,27 +66,29 @@ export class BoardController {
     this._subscriptions.length = 0;
   }
 
-  _renderCard(card) {
-    const cardController = new CardController(
-      this._container,
-      card,
-      this._onDataChange,
-      this._onChangeView
-    );
+  _onDataChange(cards) {
+    this._cards = [...cards, ...this._cards.slice(this._showedCards)];
 
-    this._subscriptions.push(cardController);
+    // Поправить, некорректно отрабатывает
+    this._showedCards = cards.length;
+
+    this._renderBoard();
   }
 
-  _onChangeView() {
-    this._subscriptions.forEach((subscriptionItem) =>
-      subscriptionItem.setDefaultView()
-    );
+  createCard() {
+    this._cardListController.createCard();
   }
 
-  _onDataChange(newData, oldData) {
-    this._cards[this._cards.findIndex((item) => item === oldData)] = newData;
-    this._cleanContainer();
-    this._cards.forEach(this._renderCard);
+  _onClickBtnLoadMore() {
+    this._cardListController.addCards(
+      this._cards.slice(this._showedCards, this._showedCards + CARD_LOAD_COUNT)
+    );
+
+    this._showedCards += CARD_LOAD_COUNT;
+
+    if (this._showedCards >= this._cards.length) {
+      unrender(this._bntLoadMore.getElement());
+    }
   }
 
   _onClickSort(evt) {
@@ -116,18 +107,25 @@ export class BoardController {
         const sortedDateUp = this._cards
           .slice()
           .sort((first, last) => first.dueDate - last.dueDate);
-        sortedDateUp.forEach(this._renderCard);
+        this._cardListController.setCards(
+          sortedDateUp.slice(0, this._showedCards)
+        );
+
         break;
 
       case `date-down`:
         const sortedDateDown = this._cards
           .slice()
           .sort((first, last) => last.dueDate - first.dueDate);
-        sortedDateDown.forEach(this._renderCard);
+        this._cardListController.setCards(
+          sortedDateDown.slice(0, this._showedCards)
+        );
         break;
 
       case `default`:
-        this._cards.forEach(this._renderCard);
+        this._cardListController.setCards(
+          this._cards.slice(0, this._showedCards)
+        );
         break;
     }
   }
