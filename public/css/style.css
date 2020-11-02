@@ -762,7 +762,10 @@ body {
 }
 .result__cards {
   display: flex;
-  flex-wrap: wrap;
+  flex-flow: row wrap;
+  align-items: flex-start;
+  min-height: 500px;
+  margin-right: -40px;
 }
 .result__empty {
   text-align: center;
@@ -779,8 +782,8 @@ body {
   border-bottom: 5px solid #000000;
 }
 .statistic__period {
-  width: 230px;
-  margin-right: 80px;
+  width: 300px;
+  margin-right: 10px;
 }
 .statistic__period-title {
   margin-top: 0;
@@ -792,7 +795,7 @@ body {
   width: 100%;
 }
 .statistic__period-input {
-  padding: 8px 0 4px 20px;
+  padding: 5px;
   margin: 0;
   border: 1px solid #000000;
   font-size: 14px;
