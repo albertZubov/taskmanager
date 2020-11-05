@@ -11,7 +11,7 @@ export class StatisticsController {
     this._statistics = new Statistics();
   }
 
-  _renderStatistics() {
+  renderStatistics() {
     render(main, this._statistics.getElement());
     this._renderCharts();
     this._statistics.getElement().classList.add(`visually-hidden`);

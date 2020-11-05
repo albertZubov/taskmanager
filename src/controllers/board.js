@@ -8,9 +8,10 @@ import { Board } from "../components/board";
 
 const CARD_LOAD_COUNT = 8;
 export class BoardController {
-  constructor(cards) {
+  constructor(cards, onDataChange) {
     this._container = new CardList().getElement();
     this._cards = cards;
+    this._onDataChange = onDataChange.bind(this);
     this._board = new Board();
     this._sort = new Sort();
     this._bntLoadMore = new CreateLoadMore();
@@ -21,7 +22,7 @@ export class BoardController {
     this._subscriptions = [];
     this._cardListController = new CardListController(
       this._container,
-      this._onDataChange.bind(this)
+      this._onDataChange
     );
   }
 
@@ -66,14 +67,14 @@ export class BoardController {
     this._subscriptions.length = 0;
   }
 
-  _onDataChange(cards) {
-    this._cards = [...cards, ...this._cards.slice(this._showedCards)];
+  // _onDataChange(cards) {
+  //   this._cards = [...cards, ...this._cards.slice(this._showedCards)];
 
-    // Поправить, некорректно отрабатывает
-    this._showedCards = cards.length;
+  //   // Поправить, некорректно отрабатывает
+  //   this._showedCards = cards.length;
 
-    this._renderBoard();
-  }
+  //   this._renderBoard();
+  // }
 
   createCard() {
     this._cardListController.createCard();

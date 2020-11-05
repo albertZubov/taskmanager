@@ -28,4 +28,7 @@ module.exports = {
       localesToKeep: [`es-us`],
     }),
   ],
+  resolve: {
+    modules: ["node_modules", path.resolve(__dirname, "src")],
+  },
 };

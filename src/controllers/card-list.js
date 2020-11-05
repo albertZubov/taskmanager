@@ -3,13 +3,13 @@ import { CardController, modeCard } from "./card";
 export class CardListController {
   constructor(container, onDataChange) {
     this._container = container;
-    this._onDataChangeMain = onDataChange;
+    // this._onDataChangeMain = onDataChange;
 
     this._creatingCard = null;
     this._subscriptions = [];
     this._cards = [];
 
-    this._onDataChange = this._onDataChange.bind(this);
+    this._onDataChange = onDataChange;
     this._onChangeView = this._onChangeView.bind(this);
   }
 
@@ -48,26 +48,26 @@ export class CardListController {
     );
   }
 
-  _onDataChange(newData, oldData) {
-    const index = this._cards.findIndex((card) => card === oldData);
+  // _onDataChange(newData, oldData) {
+  //   const index = this._cards.findIndex((card) => card === oldData);
 
-    if (newData === null && oldData === null) {
-      this._creatingCard = null;
-    } else if (newData === null && this._cards.includes(oldData)) {
-      this._cards = [
-        ...this._cards.slice(0, index),
-        ...this._cards.slice(index + 1),
-      ];
-    } else if (oldData === null) {
-      this._creatingCard = null;
-      this._cards = [...this._cards, newData];
-    } else {
-      this._cards[index] = newData;
-    }
+  //   if (newData === null && oldData === null) {
+  //     this._creatingCard = null;
+  //   } else if (newData === null && this._cards.includes(oldData)) {
+  //     this._cards = [
+  //       ...this._cards.slice(0, index),
+  //       ...this._cards.slice(index + 1),
+  //     ];
+  //   } else if (oldData === null) {
+  //     this._creatingCard = null;
+  //     this._cards = [...this._cards, newData];
+  //   } else {
+  //     this._cards[index] = newData;
+  //   }
 
-    this._cleanContainer();
-    this._onDataChangeMain(this._cards);
-  }
+  //   this._cleanContainer();
+  //   this._onDataChangeMain(this._cards);
+  // }
 
   _cleanContainer() {
     this._container.innerHTML = ``;

@@ -88,7 +88,7 @@ export class CardController {
       .getElement()
       .querySelector(`.card__delete`)
       .addEventListener(`click`, () => {
-        this._onDataChange(null, this._data);
+        this._onDataChange(`delete`, this._data);
       });
 
     this._cardEdit

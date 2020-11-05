@@ -1,3 +1,5 @@
+import { ModelCard } from "./model-card";
+
 const Method = {
   GET: `GET`,
   POST: `POST`,
@@ -17,14 +19,18 @@ const toJSON = (response) => {
   return response.json();
 };
 
-const API = class {
+export class API {
   constructor({ endPoint, authorization }) {
     this._authorization = authorization;
     this._endPoint = endPoint;
   }
 
   getCards() {
-    return this._load({ url: `tasks` }).then(toJSON);
+    return this._load({ url: `tasks` })
+      .then(toJSON)
+      .then((cards) => {
+        return ModelCard.parseCards(cards);
+      });
   }
 
   createCard({ card }) {
@@ -33,7 +39,9 @@ const API = class {
       method: Method.POST,
       body: JSON.stringify(card),
       headers: new Headers({ "Content-type": "application/json" }),
-    }).then(toJSON);
+    })
+      .then(toJSON)
+      .then(ModelCard.parseCard);
   }
 
   updateCard({ id, data }) {
@@ -42,7 +50,9 @@ const API = class {
       method: Method.PUT,
       body: JSON.stringify(data),
       headers: new Headers({ "Content-type": "application/data" }),
-    }).then(toJSON);
+    })
+      .then(toJSON)
+      .then(ModelCard.parseCard);
   }
 
   deleteCard({ id }) {
@@ -62,4 +72,4 @@ const API = class {
         throw err;
       });
   }
-};
+}
