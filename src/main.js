@@ -9,10 +9,25 @@ export const main = document.querySelector(`.main`);
 const controlRemove = main.querySelector(`.control`);
 main.removeChild(controlRemove);
 
+/* eslint-disable */
+const onDataChange = (actionType, update) => {
+  switch (actionType) {
+    case `delete`:
+      api
+        .deleteCard({
+          id: update.id,
+        })
+        .then(() => api.getCards())
+        .then((cards) => mainCtrl.render(cards));
+      break;
+  }
+};
+
 // Запуск контроллера MainController
+const mainCtrl = new MainController(onDataChange);
 const api = new API({ endPoint: END_POINT, authorization: AUTHORIZATION });
 api.getCards().then((cards) => {
-  new MainController(cards, onDataChange).init();
+  mainCtrl.render(cards);
 });
 
 /* eslint-disable */

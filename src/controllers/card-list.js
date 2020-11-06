@@ -71,7 +71,7 @@ export class CardListController {
 
   _cleanContainer() {
     this._container.innerHTML = ``;
-    this._subscriptions.length = 0;
+    this._subscriptions = [];
   }
 
   createCard() {

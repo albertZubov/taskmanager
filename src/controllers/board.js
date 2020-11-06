@@ -6,6 +6,10 @@ import { CardListController } from "./card-list";
 import { CardList } from "../components/card-list";
 import { Board } from "../components/board";
 
+// update: Main > Board > CardList > Card
+// change: Card > CardList > Board > Main
+// update: Main > Board > CardList > Card
+
 const CARD_LOAD_COUNT = 8;
 export class BoardController {
   constructor(cards, onDataChange) {
@@ -24,6 +28,8 @@ export class BoardController {
       this._container,
       this._onDataChange
     );
+
+    this._boardController = null;
   }
 
   show() {
@@ -39,17 +45,7 @@ export class BoardController {
     this._board.getElement().classList.add(`visually-hidden`);
   }
 
-  _renderBoard() {
-    const boardContainer = render(main, this._board.getElement());
-    render(boardContainer, this._sort.getElement());
-    render(boardContainer, this._container);
-
-    render(boardContainer, this._bntLoadMore.getElement());
-
-    if (this._showedCards >= this._cards.length) {
-      unrender(this._bntLoadMore.getElement());
-    }
-
+  _checkRenderBoard() {
     this._cardListController.setCards(this._cards.slice(0, this._showedCards));
 
     this._bntLoadMore
@@ -62,9 +58,27 @@ export class BoardController {
       .addEventListener(`click`, (evt) => this._onClickSort(evt));
   }
 
+  _renderBoard() {
+    const board = document.querySelector(`.board`);
+    if (board) {
+      main.removeChild(board);
+      this._checkRenderBoard();
+    }
+
+    this._boardController = render(main, this._board.getElement());
+    render(this._boardController, this._sort.getElement());
+    render(this._boardController, this._container);
+    render(this._boardController, this._bntLoadMore.getElement());
+
+    if (this._showedCards >= this._cards.length) {
+      unrender(this._bntLoadMore.getElement());
+    }
+    this._checkRenderBoard();
+  }
+
   _cleanContainer() {
     this._container.innerHTML = ``;
-    this._subscriptions.length = 0;
+    this._subscriptions = [];
   }
 
   // _onDataChange(cards) {
