@@ -10,7 +10,7 @@ import { Board } from "../components/board";
 // change: Card > CardList > Board > Main
 // update: Main > Board > CardList > Card
 
-const CARD_LOAD_COUNT = 8;
+const CARD_LOAD_COUNT = 4;
 export class BoardController {
   constructor(cards, onDataChange) {
     this._container = new CardList().getElement();
@@ -65,6 +65,7 @@ export class BoardController {
       this._checkRenderBoard();
     }
 
+    // TODO переделать, чтобы board не удалялся, а очищался
     this._boardController = render(main, this._board.getElement());
     render(this._boardController, this._sort.getElement());
     render(this._boardController, this._container);

@@ -8,6 +8,11 @@ export const modeCard = {
   default: `default`,
 };
 
+const actionsTask = {
+  delete: `delete`,
+  update: `update`,
+};
+
 export class CardController {
   constructor(container, data, onDataChange, onChangeView, mode) {
     this._container = container;
@@ -88,7 +93,7 @@ export class CardController {
       .getElement()
       .querySelector(`.card__delete`)
       .addEventListener(`click`, () => {
-        this._onDataChange(`delete`, this._data);
+        this._onDataChange(actionsTask.delete, this._data);
       });
 
     this._cardEdit
@@ -104,34 +109,33 @@ export class CardController {
           this._cardEdit.getElement().querySelector(`.card__form`)
         );
 
-        const entry = {
-          description: formData.get(`text`),
-          color: formData.get(`color`),
-          tags: new Set(formData.getAll(`hashtag`)),
-          dueDate: new Date(formData.get(`date`)),
-          dueTime: this._data.dueTime,
-          isRepeat: this._cardEdit._isRepeat,
-          isDate: this._cardEdit._isDate,
-          repeatingDays: formData.getAll(`repeat`).reduce(
-            (acc, it) => {
-              acc[it] = true;
-              return acc;
-            },
-            {
-              mo: false,
-              tu: false,
-              we: false,
-              th: false,
-              fr: false,
-              sa: false,
-              su: false,
-            }
-          ),
-        };
+        this._data.description = formData.get(`text`);
+        this._data.color = formData.get(`color`);
+        this._data.tags = new Set(formData.getAll(`hashtag`));
+        this._data.dueDate = new Date(formData.get(`date`));
+        this._data.dueTime = this._data.dueTime;
+        this._data.isRepeat = this._cardEdit._isRepeat;
+        this._data.isDate = this._cardEdit._isDate;
+        this._data.repeatingDays = formData.getAll(`repeat`).reduce(
+          (acc, it) => {
+            acc[it] = true;
+            return acc;
+          },
+          {
+            mo: false,
+            tu: false,
+            we: false,
+            th: false,
+            fr: false,
+            sa: false,
+            su: false,
+          }
+        );
 
         this._onDataChange(
-          entry,
-          this._mode === modeCard.default ? this._data : null
+          actionsTask.update,
+          this._data
+          // this._mode === modeCard.default ? this._data : null
         );
 
         document.removeEventListener(`keydown`, onEscKeyDown);

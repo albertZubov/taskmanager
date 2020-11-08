@@ -45,11 +45,12 @@ export class API {
   }
 
   updateCard({ id, data }) {
+    console.log(id, data);
     return this._load({
       url: `tasks/${id}`,
       method: Method.PUT,
       body: JSON.stringify(data),
-      headers: new Headers({ "Content-type": "application/data" }),
+      headers: new Headers({ "Content-type": "application/json" }),
     })
       .then(toJSON)
       .then(ModelCard.parseCard);

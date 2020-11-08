@@ -97,5 +97,5 @@ export class CardListController {
       this._onChangeView,
       modeCard.add
     );
-  }
+  } 
 }

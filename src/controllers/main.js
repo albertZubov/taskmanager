@@ -13,7 +13,7 @@ import { StatisticsController } from "./statistics";
 // const getArrDataCards = (count) => new Array(count).fill(``).map(getCard);
 // const cards = getArrDataCards(CARD_COUNT);
 
-export class MainController {
+export class MainController { 
   constructor(onDataChange) {
     // this._cards = cards;
     this._onDataChange = onDataChange;
