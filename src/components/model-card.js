@@ -29,8 +29,9 @@ export class ModelCard {
       "due_date": this.dueDate,
       "tags": [...this.tags.values()],
       "is_favorite": this.isFavorite,
-      "is_archive": this.isArchive,
-      "color": this.color
+      "is_archived": this.isArchive,
+      "color": this.color,
+      "repeating_days": this.repeatingDays
     };
   }
 }

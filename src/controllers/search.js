@@ -6,12 +6,11 @@ import { CardListController } from "./card-list";
 import { SearchResultCards } from "../components/search-result-cards";
 
 export class SearchController {
-  constructor(container, search, onBackBtn) {
+  constructor(cards, container, search, boardController) {
     this._container = container;
     this._search = search;
-    this._onBackBtn = onBackBtn;
-
-    this._cards = [];
+    this._cards = cards;
+    this._boardController = boardController;
 
     this._searchResult = new SearchResult();
     this._searchResultCards = new SearchResultCards();
@@ -22,10 +21,10 @@ export class SearchController {
       this._onDataChange.bind(this)
     );
 
-    this._init();
+    // console.log(this._boardShow());
   }
 
-  _init() {
+  init() {
     this.hide();
 
     render(this._container, this._searchResult.getElement());
@@ -39,7 +38,8 @@ export class SearchController {
       .querySelector(`.result__back`)
       .addEventListener(`click`, () => {
         this._search.querySelector(`input`).value = ``;
-        this._onBackBtn();
+        this.hide();
+        this._boardController.show();
       });
 
     this._search.querySelector(`input`).addEventListener(`keyup`, (evt) => {
@@ -55,9 +55,7 @@ export class SearchController {
     this._searchResult.getElement().classList.add(`visually-hidden`);
   }
 
-  show(cards) {
-    this._cards = cards;
-
+  show() {
     if (this._searchResult.getElement().classList.contains(`visually-hidden`)) {
       this._showSearchResult(``, this._cards);
       this._searchResult.getElement().classList.remove(`visually-hidden`);

@@ -11,7 +11,7 @@ export class StatisticsController {
     this._statistics = new Statistics();
   }
 
-  renderStatistics() {
+  init() {
     render(main, this._statistics.getElement());
     this._renderCharts();
     this._statistics.getElement().classList.add(`visually-hidden`);
@@ -58,11 +58,6 @@ export class StatisticsController {
   }
 
   show() {
-    // TODO неочевидная логика скрытия и закрытия - обсудить с Олегом
-    if (!this._statistics.getElement().parentNode.parentNode) {
-      this._renderStatistics();
-    }
-
     this._statistics.getElement().classList.remove(`visually-hidden`);
   }
 

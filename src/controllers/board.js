@@ -6,10 +6,6 @@ import { CardListController } from "./card-list";
 import { CardList } from "../components/card-list";
 import { Board } from "../components/board";
 
-// update: Main > Board > CardList > Card
-// change: Card > CardList > Board > Main
-// update: Main > Board > CardList > Card
-
 const CARD_LOAD_COUNT = 4;
 export class BoardController {
   constructor(cards, onDataChange) {

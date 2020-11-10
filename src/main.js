@@ -11,7 +11,6 @@ main.removeChild(controlRemove);
 
 /* eslint-disable */
 const onDataChange = (actionType, update) => {
-  console.log(update);
   switch (actionType) {
     case `delete`:
       api
@@ -36,6 +35,7 @@ const onDataChange = (actionType, update) => {
 // Запуск контроллера MainController
 const mainCtrl = new MainController(onDataChange);
 const api = new API({ endPoint: END_POINT, authorization: AUTHORIZATION });
+
 api.getCards().then((cards) => {
   mainCtrl.render(cards);
 });

@@ -26,11 +26,7 @@ export class API {
   }
 
   getCards() {
-    return this._load({ url: `tasks` })
-      .then(toJSON)
-      .then((cards) => {
-        return ModelCard.parseCards(cards);
-      });
+    return this._load({ url: `tasks` }).then(toJSON).then(ModelCard.parseCards);
   }
 
   createCard({ card }) {
@@ -45,7 +41,6 @@ export class API {
   }
 
   updateCard({ id, data }) {
-    console.log(id, data);
     return this._load({
       url: `tasks/${id}`,
       method: Method.PUT,
