@@ -1,4 +1,5 @@
 import { CardController, modeCard } from "./card";
+import { ModelCard } from "../components/model-card";
 
 export class CardListController {
   constructor(container, onDataChange) {
@@ -74,6 +75,8 @@ export class CardListController {
     this._subscriptions = [];
   }
 
+  /* eslint-disable */
+
   createCard() {
     if (this._creatingCard) {
       return;
@@ -81,18 +84,28 @@ export class CardListController {
 
     const defaultCard = {
       description: `Find money for travel`,
+      id: "",
       color: `yellow`,
-      tags: new Set(),
-      dueDate: new Date(),
-      dueTime: new Date(),
-      isRepeat: true,
-      isDate: true,
-      repeatingDays: {},
+      tags: new Set(["cinema", "entertainment", "myself"]),
+      due_date: new Date(),
+      is_favorite: true,
+      is_archived: true,
+      repeating_days: {
+        mo: false,
+        tu: false,
+        we: false,
+        th: false,
+        fr: false,
+        sa: false,
+        su: false,
+      },
     };
+
+    const cardToModel = new ModelCard(defaultCard);
 
     this._creatingCard = new CardController(
       this._container,
-      defaultCard,
+      cardToModel,
       this._onDataChange,
       this._onChangeView,
       modeCard.add

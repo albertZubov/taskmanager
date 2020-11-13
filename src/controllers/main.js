@@ -10,7 +10,6 @@ import { StatisticsController } from "./statistics";
 
 export class MainController {
   constructor(onDataChange) {
-    // this._cards = cards;
     this._onDataChange = onDataChange;
     this._search = new Search();
     this._boardController = null;
