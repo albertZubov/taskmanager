@@ -61,7 +61,9 @@ export class Card extends AbstractComponent {
                     <span class="card__date">${moment(this._dueDate).format(
                       "D MMMM GGGG"
                     )}</span>
-                    <span class="card__time">${this._dueTime.getHours()} : ${this._dueTime.getMinutes()}</span>
+                    <span class="card__time">${this._dueTime.hours} : ${
+      this._dueTime.minutes
+    }</span>
                   </p>
                 </div>
               </div>

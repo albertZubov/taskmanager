@@ -78,15 +78,6 @@ export class BoardController {
     this._subscriptions = [];
   }
 
-  // _onDataChange(cards) {
-  //   this._cards = [...cards, ...this._cards.slice(this._showedCards)];
-
-  //   // Поправить, некорректно отрабатывает
-  //   this._showedCards = cards.length;
-
-  //   this._renderBoard();
-  // }
-
   createCard() {
     this._cardListController.createCard();
   }
@@ -113,7 +104,6 @@ export class BoardController {
     this._cleanContainer();
 
     /* eslint-disable */
-
     switch (evt.target.dataset.sortType) {
       case `date-up`:
         const sortedDateUp = this._cards

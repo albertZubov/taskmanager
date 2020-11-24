@@ -254,8 +254,8 @@ export class CardEdit extends AbstractComponent {
         </div>
     
         <div class="card__status-btns">
-          <button class="card__save" type="submit">save</button>
-          <button class="card__delete" type="button">delete</button>
+          <button class="card__save" type="submit" data-state-text="saving...">save</button>
+          <button class="card__delete" type="button" data-state-text="deleting...">delete</button>
         </div>
       </div>
     </form>

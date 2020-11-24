@@ -3,12 +3,12 @@ import { CardEdit } from "../components/card-edit";
 import { render } from "../components/utils";
 import flatpickr from "flatpickr";
 
-export const modeCard = {
+export const CardMode = {
   add: `adding`,
   default: `default`,
 };
 
-export const actionsTask = {
+export const TaskActions = {
   delete: `delete`,
   update: `update`,
   create: `create`,
@@ -17,11 +17,6 @@ export const actionsTask = {
 export const CardState = {
   READY: "READY",
   LOADING: "LOADING",
-};
-
-const btnState = {
-  SAVING: `saving`,
-  DELETING: `deleting`,
 };
 
 export class CardController {
@@ -49,7 +44,7 @@ export class CardController {
   create() {
     this._currentView = this._card;
 
-    if (this._mode === modeCard.add) {
+    if (this._mode === CardMode.add) {
       this._currentView = this._cardEdit;
     }
 
@@ -67,14 +62,14 @@ export class CardController {
 
     const onEscKeyDown = (evt) => {
       if (evt.key === `Escape` || evt.key === `Esc`) {
-        if (this._mode === modeCard.default) {
+        if (this._mode === CardMode.default) {
           if (this._container.contains(this._cardEdit.getElement())) {
             this._container.replaceChild(
               this._card.getElement(),
               this._cardEdit.getElement()
             );
           }
-        } else if (this._mode === modeCard.add) {
+        } else if (this._mode === CardMode.add) {
           this._container.removeChild(this._currentView.getElement());
         }
 
@@ -108,20 +103,19 @@ export class CardController {
         document.addEventListener(`keydown`, onEscKeyDown);
       });
 
-    this._btnCardDelete.addEventListener(`click`, () => {
-      this.setState(CardState.LOADING, btnState.DELETING);
+    this._btnCardDelete.addEventListener(`click`, (evt) => {
+      const { stateText } = evt.target.dataset;
+      this.setState(CardState.LOADING);
+      this._btnCardDelete.textContent = stateText;
 
-      this._onDataChange(actionsTask.delete, this._data, () =>
-        this.setState(CardState.READY, btnState.DELETING)
+      this._onDataChange(TaskActions.delete, this._data, () =>
+        this.setState(CardState.READY)
       );
     });
 
     this._btnCardSave.addEventListener(`click`, (evt) => {
       evt.preventDefault();
-      // this._container.replaceChild(
-      //   this._card.getElement(),
-      //   this._cardEdit.getElement()
-      // );
+      const { stateText } = evt.target.dataset;
 
       const formData = new FormData(
         this._cardEdit.getElement().querySelector(`.card__form`)
@@ -150,12 +144,13 @@ export class CardController {
         }
       );
 
-      this.setState(CardState.LOADING, btnState.SAVING);
+      this.setState(CardState.LOADING);
+      this._btnCardSave.textContent = stateText;
 
       this._onDataChange(
-        this._mode === modeCard.add ? actionsTask.create : actionsTask.update,
+        this._mode === CardMode.add ? TaskActions.create : TaskActions.update,
         this._data,
-        () => this.setState(CardState.READY, btnState.SAVING)
+        () => this.setState(CardState.READY)
       );
 
       document.removeEventListener(`keydown`, onEscKeyDown);
@@ -179,40 +174,21 @@ export class CardController {
   }
 
   /* eslint-disable */
-  setState(state, btn) {
-    console.log(btnState);
-    if (this._cardInner.classList.contains(`border-error`)) {
-      this._cardInner.classList.remove(`border-error`);
-    }
-
-    if (this._cardEdit.getElement().classList.contains("shake")) {
-      this._cardEdit.getElement().classList.remove("shake");
-    }
+  setState(state) {
+    this._cardInner.classList.remove(`border-error`);
+    this._cardEdit.getElement().classList.remove("shake");
 
     this._cardEdit.getElement().querySelector(`.card__text`).disabled =
       state === CardState.LOADING;
     this._btnCardSave.disabled = state === CardState.LOADING;
     this._btnCardDelete.disabled = state === CardState.LOADING;
 
-    switch (state) {
-      case CardState.LOADING:
-        if (btn === btnState.SAVING) {
-          this._btnCardSave.textContent = `${btn}...`;
-        } else {
-          this._btnCardDelete.textContent = `${btn}...`;
-        }
-        break;
+    if (state === CardState.READY) {
+      this._cardInner.classList.add(`border-error`);
+      this._cardEdit.getElement().classList.add(`shake`);
 
-      case CardState.READY:
-        this._cardInner.classList.add(`border-error`);
-        this._cardEdit.getElement().classList.add(`shake`);
-
-        if (btn === btnState.SAVING) {
-          this._btnCardSave.textContent = `save`;
-        } else {
-          this._btnCardDelete.textContent = `delete`;
-        }
-        break;
+      this._btnCardSave.textContent = `save`;
+      this._btnCardDelete.textContent = `delete`;
     }
   }
 

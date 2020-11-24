@@ -4,6 +4,14 @@ export const createElement = (template) => {
   return newElement.firstElementChild;
 };
 
+export const parseDate = (date) => {
+  const dateObj = {
+    hours: date.getHours(),
+    minutes: date.getMinutes(),
+  };
+  return dateObj;
+};
+
 export const render = (container, element) => {
   let childrens = element;
 

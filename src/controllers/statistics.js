@@ -71,7 +71,6 @@ export class StatisticsController {
       (color) => this._cards.filter((elem) => color === elem.color).length
     );
 
-    // const tagsCtx = document.querySelector(`.statistic__tags`);
     const colorsWrap = this._statistics
       .getElement()
       .querySelector(`.statistic__colors-wrap`);
@@ -145,6 +144,5 @@ export class StatisticsController {
         canvas.style.width = `400px`;
         canvas.style.height = `300px`;
       });
-    // colorsCtx.style.height = `300px`;
   }
 }

@@ -1,6 +1,6 @@
 import { MainController } from "./controllers/main";
 import { API } from "./components/api";
-import { actionsTask } from "./controllers/card";
+import { TaskActions } from "./controllers/card";
 
 const AUTHORIZATION = `Basic dXNlckBwYXNzd29yZAo=${Math.random()}`;
 const END_POINT = `https://htmlacademy-es-9.appspot.com/task-manager`;
@@ -11,24 +11,22 @@ const controlRemove = main.querySelector(`.control`);
 main.removeChild(controlRemove);
 
 /* eslint-disable */
-
 const onDataChange = (actionType, card, onError) => {
   switch (actionType) {
-    case actionsTask.delete:
+    case TaskActions.delete:
       api
         .deleteCard({
           id: card.id,
         })
         .then(() => api.getCards())
         .then((cards) => {
-          // throw new Error("Meow");
           mainCtrl.render(cards);
         })
         .catch(() => {
           onError();
         });
       break;
-    case actionsTask.update:
+    case TaskActions.update:
       api
         .updateCard({
           id: card.id,
@@ -36,14 +34,13 @@ const onDataChange = (actionType, card, onError) => {
         })
         .then(() => api.getCards())
         .then((cards) => {
-          // throw new Error("Meow");
           mainCtrl.render(cards);
         })
         .catch(() => {
           onError();
         });
       break;
-    case actionsTask.create:
+    case TaskActions.create:
       api
         .createCard({
           card: card.toRAW(),

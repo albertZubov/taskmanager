@@ -54,7 +54,6 @@ export class MainController {
       }
 
       /* eslint-disable */
-
       switch (evt.target.id) {
         case `control__task`:
           this._statisticsController.hide();

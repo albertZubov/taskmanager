@@ -1,10 +1,9 @@
-import { CardController, modeCard } from "./card";
+import { CardController, CardMode } from "./card";
 import { ModelCard } from "../components/model-card";
 
 export class CardListController {
   constructor(container, onDataChange) {
     this._container = container;
-    // this._onDataChangeMain = onDataChange;
 
     this._creatingCard = null;
     this._subscriptions = [];
@@ -16,7 +15,6 @@ export class CardListController {
 
   setCards(cards) {
     this._cards = cards;
-    // this._subscriptions = [];
 
     this._container.innerHTML = ``;
     this._cards.forEach((card) => {
@@ -37,7 +35,7 @@ export class CardListController {
       card,
       this._onDataChange,
       this._onChangeView,
-      modeCard.default
+      CardMode.default
     );
 
     this._subscriptions.push(cardController);
@@ -49,34 +47,12 @@ export class CardListController {
     );
   }
 
-  // _onDataChange(newData, oldData) {
-  //   const index = this._cards.findIndex((card) => card === oldData);
-
-  //   if (newData === null && oldData === null) {
-  //     this._creatingCard = null;
-  //   } else if (newData === null && this._cards.includes(oldData)) {
-  //     this._cards = [
-  //       ...this._cards.slice(0, index),
-  //       ...this._cards.slice(index + 1),
-  //     ];
-  //   } else if (oldData === null) {
-  //     this._creatingCard = null;
-  //     this._cards = [...this._cards, newData];
-  //   } else {
-  //     this._cards[index] = newData;
-  //   }
-
-  //   this._cleanContainer();
-  //   this._onDataChangeMain(this._cards);
-  // }
-
   _cleanContainer() {
     this._container.innerHTML = ``;
     this._subscriptions = [];
   }
 
   /* eslint-disable */
-
   createCard() {
     if (this._creatingCard) {
       return;
@@ -108,7 +84,7 @@ export class CardListController {
       cardToModel,
       this._onDataChange,
       this._onChangeView,
-      modeCard.add
+      CardMode.add
     );
   }
 }

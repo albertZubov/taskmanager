@@ -20,8 +20,6 @@ export class SearchController {
       this._searchResultCards.getElement(),
       this._onDataChange.bind(this)
     );
-
-    // console.log(this._boardShow());
   }
 
   init() {
@@ -65,7 +63,6 @@ export class SearchController {
   _showSearchResult(text, cards) {
     if (this._searchResultInfo) {
       unrender(this._searchResultInfo.getElement());
-      // this._searchResultInfo.removeElement();
     }
 
     this._searchResultInfo = new SearchResultInfo({
